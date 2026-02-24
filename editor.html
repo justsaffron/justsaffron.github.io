@@ -9,28 +9,28 @@
 <style>
 .ed-layout { display:grid; grid-template-columns:250px 1fr; min-height:calc(100vh - 58px); margin-top:58px; }
 .ed-sidebar { background:var(--navy-mid); border-right:1px solid var(--border); padding:2rem 0; position:sticky; top:58px; height:calc(100vh - 58px); overflow-y:auto; }
-.sb-label { font-size:0.46rem; letter-spacing:0.38em; text-transform:uppercase; color:var(--text-dim); padding:0 1.5rem; margin-bottom:0.5rem; margin-top:1.5rem; }
-.sb-btn { display:flex; align-items:center; gap:0.8rem; width:100%; padding:0.7rem 1.5rem; background:none; border:none; font-family:var(--font); font-size:0.6rem; letter-spacing:0.1em; color:var(--text-muted); cursor:pointer; transition:all 0.2s; text-align:left; border-left:2px solid transparent; }
+.sb-label { font-size:0.82rem; letter-spacing:0.38em; text-transform:uppercase; color:var(--text-dim); padding:0 1.5rem; margin-bottom:0.5rem; margin-top:1.5rem; }
+.sb-btn { display:flex; align-items:center; gap:0.8rem; width:100%; padding:0.7rem 1.5rem; background:none; border:none; font-family:var(--font); font-size:0.88rem; letter-spacing:0.1em; color:var(--text-muted); cursor:pointer; transition:all 0.2s; text-align:left; border-left:2px solid transparent; }
 .sb-btn:hover { color:var(--text-warm); background:rgba(232,170,68,0.04); }
 .sb-btn.active { color:var(--saffron); background:rgba(232,170,68,0.06); border-left-color:var(--saffron); }
 .sb-divider { height:1px; background:var(--border); margin:0.8rem 1.5rem; }
 .ed-main { padding:3rem; overflow-y:auto; }
 .ed-panel { display:none; } .ed-panel.active { display:block; }
-.panel-title { font-size:0.58rem; font-weight:300; letter-spacing:0.42em; text-transform:uppercase; color:var(--saffron); margin-bottom:0.5rem; }
-.panel-sub { font-size:0.67rem; color:var(--text-muted); line-height:1.7; margin-bottom:2.5rem; max-width:60ch; }
-.stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:1px; background:var(--border-sky); margin-bottom:3rem; }
+.panel-title { font-size:0.88rem; font-weight:300; letter-spacing:0.42em; text-transform:uppercase; color:var(--saffron); margin-bottom:0.5rem; }
+.panel-sub { font-size:0.92rem; color:var(--text-muted); line-height:1.7; margin-bottom:2.5rem; max-width:60ch; }
+.stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:1px; background:var(--border-sky); margin-bottom:3rem; }
 .stat-box { background:var(--navy-mid); padding:1.5rem; text-align:center; }
 .stat-num   { font-size:2.5rem; font-weight:100; color:var(--saffron); line-height:1; }
-.stat-label { font-size:0.5rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--text-dim); margin-top:0.5rem; }
+.stat-label { font-size:0.82rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--text-dim); margin-top:0.5rem; }
 .data-tbl { width:100%; border-collapse:collapse; }
-.data-tbl th { font-size:0.46rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--text-dim); padding:0.6rem 1rem; text-align:left; border-bottom:1px solid var(--border); background:rgba(14,16,32,0.5); }
-.data-tbl td { padding:0.85rem 1rem; border-bottom:1px solid rgba(125,183,202,0.06); font-size:0.63rem; color:var(--text-warm); vertical-align:top; }
+.data-tbl th { font-size:0.82rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--text-dim); padding:0.6rem 1rem; text-align:left; border-bottom:1px solid var(--border); background:rgba(14,16,32,0.5); }
+.data-tbl td { padding:0.85rem 1rem; border-bottom:1px solid rgba(125,183,202,0.06); font-size:0.88rem; color:var(--text-warm); vertical-align:top; }
 .data-tbl tr:hover td { background:rgba(232,170,68,0.02); }
 .help-b { padding:1.4rem; background:rgba(32,94,167,0.07); border:1px solid rgba(125,183,202,0.15); margin-bottom:1px; }
-.help-b p { font-size:0.64rem; color:var(--text-muted); line-height:1.8; }
+.help-b p { font-size:0.88rem; color:var(--text-muted); line-height:1.8; }
 .help-b strong { color:var(--sky); font-weight:400; }
 .data-zone { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:2rem; padding:1.5rem; background:rgba(14,16,32,0.5); border:1px solid var(--border); }
-.data-zone p { font-size:0.62rem; color:var(--text-muted); width:100%; line-height:1.65; }
+.data-zone p { font-size:0.88rem; color:var(--text-muted); width:100%; line-height:1.65; }
 </style>
 </head>
 <body>
@@ -38,9 +38,9 @@
 <nav style="position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:58px;background:rgba(25,29,58,0.98);border-bottom:1px solid var(--border);">
   <a class="nav-logo" href="index.html">Just Saffron</a>
   <div style="display:flex;align-items:center;gap:1rem">
-    <span style="font-size:0.52rem;letter-spacing:0.2em;color:var(--sky)">✦ CONTENT EDITOR</span>
-    <a href="index.html" class="btn" style="font-size:0.5rem;padding:0.4rem 1rem">← Back to Site</a>
-    <button class="btn btn-danger" onclick="logout()" style="font-size:0.5rem;padding:0.4rem 1rem">Lock</button>
+    <span style="font-size:0.82rem;letter-spacing:0.2em;color:var(--sky)">✦ CONTENT EDITOR</span>
+    <a href="index.html" class="btn" style="font-size:0.82rem;padding:0.4rem 1rem">← Back to Site</a>
+    <button class="btn btn-danger" onclick="logout()" style="font-size:0.82rem;padding:0.4rem 1rem">Lock</button>
   </div>
 </nav>
 
@@ -52,8 +52,6 @@
     <div class="sb-label">Manage Content</div>
     <button class="sb-btn" onclick="showPanel('projects',this)"><span>⬡</span> PM Projects</button>
     <button class="sb-btn" onclick="showPanel('mtg',this)"><span>⬢</span> MTG Decks</button>
-    <button class="sb-btn" onclick="showPanel('moodboards',this)"><span>◈</span> Moodboards</button>
-    <button class="sb-btn" onclick="showPanel('photography',this)"><span>◎</span> Photography</button>
     <button class="sb-btn" onclick="showPanel('reviews',this)"><span>◇</span> Reviews</button>
     <button class="sb-btn" onclick="showPanel('resources',this)"><span>◉</span> Resources</button>
     <div class="sb-divider"></div>
@@ -70,123 +68,209 @@
       <div class="stats-row">
         <div class="stat-box"><div class="stat-num" id="s-projects">0</div><div class="stat-label">Projects</div></div>
         <div class="stat-box"><div class="stat-num" id="s-mtg">0</div><div class="stat-label">Decks</div></div>
-        <div class="stat-box"><div class="stat-num" id="s-boards">0</div><div class="stat-label">Moodboards</div></div>
-        <div class="stat-box"><div class="stat-num" id="s-photos">0</div><div class="stat-label">Photos</div></div>
         <div class="stat-box"><div class="stat-num" id="s-reviews">0</div><div class="stat-label">Reviews</div></div>
         <div class="stat-box"><div class="stat-num" id="s-resources">0</div><div class="stat-label">Resources</div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border-sky)">
         <div style="background:var(--navy-mid);padding:2rem">
-          <div style="font-size:0.52rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--sky);margin-bottom:1rem">Quick Links</div>
+          <div style="font-size:0.82rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--sky);margin-bottom:1rem">Quick Links</div>
           <div style="display:flex;flex-direction:column;gap:0.5rem">
             <a href="projects.html" class="btn btn-primary" style="justify-content:space-between">PM Projects <span>→</span></a>
             <a href="mtg.html" class="btn btn-primary" style="justify-content:space-between">MTG Decks <span>→</span></a>
-            <a href="moodboards.html" class="btn btn-primary" style="justify-content:space-between">Moodboards <span>→</span></a>
-            <a href="photography.html" class="btn btn-primary" style="justify-content:space-between">Photography <span>→</span></a>
             <a href="reviews.html" class="btn btn-primary" style="justify-content:space-between">Reviews <span>→</span></a>
             <a href="resources.html" class="btn btn-primary" style="justify-content:space-between">Resources <span>→</span></a>
           </div>
         </div>
         <div style="background:var(--navy-mid);padding:2rem">
-          <div style="font-size:0.52rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--sky);margin-bottom:1rem">Recent Items</div>
-          <div id="recent-items" style="font-size:0.62rem;color:var(--text-muted);line-height:2"></div>
+          <div style="font-size:0.82rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--sky);margin-bottom:1rem">Recent Items</div>
+          <div id="recent-items" style="font-size:0.88rem;color:var(--text-muted);line-height:2"></div>
         </div>
       </div>
     </div>
+
     <!-- PROJECTS -->
-    <div class="ed-panel" id="panel-projects"><div class="panel-title">PM Projects</div><div class="panel-sub">View, manage, and delete your PM projects. To add or edit, go to the Projects page.</div><a href="projects.html" class="btn btn-primary" style="margin-bottom:1.5rem">+ Add Project on Projects Page</a><div id="tbl-projects"></div></div>
+    <div class="ed-panel" id="panel-projects">
+      <div class="panel-title">PM Projects</div>
+      <div class="panel-sub">View, manage, and delete your PM projects. To add or edit, go to the Projects page.</div>
+      <a href="projects.html" class="btn btn-primary" style="margin-bottom:1.5rem">+ Add Project on Projects Page</a>
+      <div id="tbl-projects"></div>
+    </div>
+
     <!-- MTG -->
-    <div class="ed-panel" id="panel-mtg"><div class="panel-title">MTG Decks</div><div class="panel-sub">View and manage your Magic the Gathering decks.</div><a href="mtg.html" class="btn btn-primary" style="margin-bottom:1.5rem">+ Add Deck on Decks Page</a><div id="tbl-mtg"></div></div>
-    <!-- MOODBOARDS -->
-    <div class="ed-panel" id="panel-moodboards"><div class="panel-title">Moodboards</div><div class="panel-sub">View and manage your moodboard collections.</div><a href="moodboards.html" class="btn btn-primary" style="margin-bottom:1.5rem">→ Go to Moodboards</a><div id="tbl-moodboards"></div></div>
-    <!-- PHOTOGRAPHY -->
-    <div class="ed-panel" id="panel-photography"><div class="panel-title">Photography</div><div class="panel-sub">View uploaded photos.</div><a href="photography.html" class="btn btn-primary" style="margin-bottom:1.5rem">→ Go to Photography</a><div id="tbl-photography"></div></div>
+    <div class="ed-panel" id="panel-mtg">
+      <div class="panel-title">MTG Decks</div>
+      <div class="panel-sub">View and manage your Magic the Gathering decks.</div>
+      <a href="mtg.html" class="btn btn-primary" style="margin-bottom:1.5rem">+ Add Deck on Decks Page</a>
+      <div id="tbl-mtg"></div>
+    </div>
+
     <!-- REVIEWS -->
-    <div class="ed-panel" id="panel-reviews"><div class="panel-title">Reviews</div><div class="panel-sub">Manage book and game reviews.</div><a href="reviews.html" class="btn btn-primary" style="margin-bottom:1.5rem">+ Add Review on Reviews Page</a><div id="tbl-reviews"></div></div>
+    <div class="ed-panel" id="panel-reviews">
+      <div class="panel-title">Reviews</div>
+      <div class="panel-sub">Manage reviews across all categories: Books, Games, Movies, Shows, Manga, Anime.</div>
+      <a href="reviews.html" class="btn btn-primary" style="margin-bottom:1.5rem">+ Add Review on Reviews Page</a>
+      <div id="tbl-reviews"></div>
+    </div>
+
     <!-- RESOURCES -->
-    <div class="ed-panel" id="panel-resources"><div class="panel-title">Resources &amp; Writing</div><div class="panel-sub">Manage resources and articles.</div><a href="resources.html" class="btn btn-primary" style="margin-bottom:1.5rem">+ Add Resource on Resources Page</a><div id="tbl-resources"></div></div>
+    <div class="ed-panel" id="panel-resources">
+      <div class="panel-title">Resources &amp; Writing</div>
+      <div class="panel-sub">Manage resources and articles.</div>
+      <a href="resources.html" class="btn btn-primary" style="margin-bottom:1.5rem">+ Add Resource on Resources Page</a>
+      <div id="tbl-resources"></div>
+    </div>
+
     <!-- DATA -->
     <div class="ed-panel" id="panel-data">
       <div class="panel-title">Backup &amp; Restore</div>
-      <div class="panel-sub">Export all your content as a JSON backup, or import a previous backup to restore data. Use this to transfer your content between browsers or devices.</div>
+      <div class="panel-sub">Export all your content as a JSON backup, or import a previous backup to restore data.</div>
       <div class="data-zone">
-        <p><strong style="color:var(--sky)">⚠ Important:</strong> Your content is stored in this browser's local storage. It persists across sessions but won't sync to other devices automatically. Export regularly to keep a backup.</p>
+        <p><strong style="color:var(--sky)">⚠ Important:</strong> Your content is stored in this browser's local storage. Export regularly to keep a backup.</p>
         <button class="btn btn-primary" onclick="exportData()">⬇ Export Backup (JSON)</button>
         <button class="btn btn-sky" onclick="document.getElementById('import-f').click()">⬆ Import Backup</button>
         <button class="btn btn-danger" onclick="clearAll()">✕ Clear All Data</button>
         <input type="file" id="import-f" accept=".json" style="display:none" onchange="importData(event)">
       </div>
     </div>
+
     <!-- HELP -->
     <div class="ed-panel" id="panel-help">
       <div class="panel-title">Help &amp; Guide</div>
       <div class="panel-sub">How to use Just Saffron — no coding required.</div>
-      <div class="help-b"><p><strong>Adding content:</strong> Go to any section page (Projects, Decks, etc.) and click the <strong>+ Add</strong> button. A form will appear — fill it in and save.</p></div>
+      <div class="help-b"><p><strong>Adding content:</strong> Go to any section page (Projects, Decks, Reviews, Resources) and click the <strong>+ Add</strong> button.</p></div>
       <div class="help-b" style="margin-top:1px"><p><strong>Editing:</strong> Hover any item and click <strong>✎ Edit</strong>. The editor will ask for your password before opening.</p></div>
-      <div class="help-b" style="margin-top:1px"><p><strong>Password protection:</strong> All edit actions require the site password. Your session stays unlocked until you close the browser tab or click "Lock" in the editor nav.</p></div>
-      <div class="help-b" style="margin-top:1px"><p><strong>Uploading images:</strong> For moodboards — open a board and click <strong>+ Add Images</strong>. Multiple files are supported. For photography — click <strong>+ Upload Photos</strong> and you can enter title, location, and tags for each. For MTG decks — click the commander image area in the Add Deck form. <strong>All images are automatically cropped to square.</strong></p></div>
-      <div class="help-b" style="margin-top:1px"><p><strong>Backup &amp; transfer:</strong> Use the Backup &amp; Restore panel to export a <code>.json</code> file, then import it on any other browser or device to restore your content.</p></div>
-      <div class="help-b" style="margin-top:1px"><p><strong>GitHub Pages:</strong> Upload all HTML, CSS, and JS files to a repo named <code>yourusername.github.io</code> and enable GitHub Pages in repo Settings. Your site will be live at that URL.</p></div>
+      <div class="help-b" style="margin-top:1px"><p><strong>Password protection:</strong> All edit actions require the site password. Your session stays unlocked until you close the browser tab or click "Lock" above.</p></div>
+      <div class="help-b" style="margin-top:1px"><p><strong>Project encryption:</strong> When authenticated, each project card shows an <strong>Encrypt</strong> toggle. Enable it to scramble the project text for public visitors. Visitors cannot toggle encryption themselves.</p></div>
+      <div class="help-b" style="margin-top:1px"><p><strong>MTG decks:</strong> Hover the Commander name or Favourite Card to see the Scryfall card image. Date Built auto-calculates deck age.</p></div>
+      <div class="help-b" style="margin-top:1px"><p><strong>Drag to reorder:</strong> Projects and decks can be dragged to any position. Use the ⠿ handle on the left of each card.</p></div>
+      <div class="help-b" style="margin-top:1px"><p><strong>Backup &amp; transfer:</strong> Use the Backup &amp; Restore panel to export a <code>.json</code> file, then import it on any other browser or device.</p></div>
+      <div class="help-b" style="margin-top:1px"><p><strong>GitHub Pages:</strong> Upload all HTML, CSS, and JS files to a repo and enable GitHub Pages in Settings.</p></div>
     </div>
   </div>
 </div>
 
 <script src="auth.js"></script>
 <script>
-// This page requires auth immediately
-function init(){
-  if(!checkEditAuth()){ showGate(()=>{ document.getElementById('ed-layout').style.display='grid'; updateStats(); }); }
-  else { document.getElementById('ed-layout').style.display='grid'; updateStats(); }
+const REVIEW_LABELS = {
+  books:'Book', games:'Game', movies:'Movie',
+  shows:'Show', manga:'Manga', anime:'Anime'
+};
+
+function init() {
+  if (!checkEditAuth()) {
+    showGate(() => { document.getElementById('ed-layout').style.display='grid'; updateStats(); });
+  } else {
+    document.getElementById('ed-layout').style.display='grid'; updateStats();
+  }
 }
 
-function logout(){ sessionStorage.removeItem('js_auth'); location.reload(); }
+function logout() { sessionStorage.removeItem('js_auth'); location.reload(); }
+function get(k) { return JSON.parse(localStorage.getItem(k)||'[]'); }
 
-function get(k){ return JSON.parse(localStorage.getItem(k)||'[]'); }
-
-function updateStats(){
+function updateStats() {
   document.getElementById('s-projects').textContent  = get('waanderer_projects').length;
   document.getElementById('s-mtg').textContent       = get('waanderer_decks').length;
-  document.getElementById('s-boards').textContent    = get('waanderer_boards').length;
-  document.getElementById('s-photos').textContent    = get('waanderer_photos').length;
   document.getElementById('s-reviews').textContent   = get('waanderer_reviews').length;
   document.getElementById('s-resources').textContent = get('waanderer_resources').length;
 
-  const all=[
-    ...get('waanderer_projects').map(p=>({l:p.name,t:'Project'})),
-    ...get('waanderer_decks').map(d=>({l:d.name,t:'Deck'})),
-    ...get('waanderer_reviews').map(r=>({l:r.title,t:r.type==='books'?'Book':'Game'})),
-    ...get('waanderer_resources').map(r=>({l:r.title,t:r.type})),
+  const all = [
+    ...get('waanderer_projects').map(p => ({ l:p.name, t:'Project' })),
+    ...get('waanderer_decks').map(d    => ({ l:d.name, t:'Deck' })),
+    ...get('waanderer_reviews').map(r  => ({ l:r.title, t: REVIEW_LABELS[r.type]||r.type })),
+    ...get('waanderer_resources').map(r=> ({ l:r.title, t:r.type })),
   ].slice(-8).reverse();
-  document.getElementById('recent-items').innerHTML=all.length?all.map(a=>`<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(125,183,202,0.06);padding:0.3rem 0"><span>${a.l}</span><span style="color:var(--text-dim);font-size:0.5rem">${a.t}</span></div>`).join(''):'<span>No items yet.</span>';
+
+  document.getElementById('recent-items').innerHTML = all.length
+    ? all.map(a => `<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(125,183,202,0.06);padding:0.3rem 0">
+        <span>${a.l}</span>
+        <span style="color:var(--text-dim);font-size:0.82rem">${a.t}</span>
+      </div>`).join('')
+    : '<span>No items yet.</span>';
 }
 
-function showPanel(name,btn){
-  document.querySelectorAll('.ed-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'));
+function showPanel(name, btn) {
+  document.querySelectorAll('.ed-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-'+name).classList.add('active');
   btn.classList.add('active');
   populatePanel(name);
 }
 
-function populatePanel(name){
-  if(name==='overview'){ updateStats(); return; }
-  if(name==='projects') buildTbl('tbl-projects',get('waanderer_projects'),['name','status','time'],'waanderer_projects');
-  if(name==='mtg')      buildTbl('tbl-mtg',get('waanderer_decks'),['name','format','status'],'waanderer_decks');
-  if(name==='reviews')  buildTbl('tbl-reviews',get('waanderer_reviews'),['title','type'],'waanderer_reviews');
-  if(name==='resources') buildTbl('tbl-resources',get('waanderer_resources'),['title','type'],'waanderer_resources');
-  if(name==='moodboards'){ const b=get('waanderer_boards'); document.getElementById('tbl-moodboards').innerHTML=b.length?b.map((x,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background:var(--navy-mid);margin-bottom:1px"><div><div style="font-size:0.75rem;color:var(--white)">${x.name}</div><div style="font-size:0.54rem;color:var(--text-dim)">${(x.images||[]).length} images</div></div><button class="btn btn-danger" onclick="delItem('waanderer_boards',${i})" style="font-size:0.5rem">✕ Delete</button></div>`).join(''):'<p style="color:var(--text-dim);font-size:0.62rem">No boards yet.</p>'; }
-  if(name==='photography'){ const p=get('waanderer_photos'); document.getElementById('tbl-photography').innerHTML=p.length?p.map((x,i)=>`<div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--navy-mid);margin-bottom:1px"><img src="${x.src}" style="width:44px;height:44px;object-fit:cover"><div style="flex:1"><div style="font-size:0.72rem;color:var(--white)">${x.title||'(untitled)'}</div><div style="font-size:0.54rem;color:var(--text-dim)">${x.loc||''}</div></div><button class="btn btn-danger" onclick="delItem('waanderer_photos',${i})" style="font-size:0.5rem">✕</button></div>`).join(''):'<p style="color:var(--text-dim);font-size:0.62rem">No photos yet.</p>'; }
+function populatePanel(name) {
+  if (name === 'overview') { updateStats(); return; }
+  if (name === 'projects')  buildTbl('tbl-projects', get('waanderer_projects'), ['name','status','time'], 'waanderer_projects');
+  if (name === 'mtg')       buildTbl('tbl-mtg', get('waanderer_decks'), ['name','format','status'], 'waanderer_decks');
+  if (name === 'reviews')   buildTbl('tbl-reviews', get('waanderer_reviews'), ['title','type'], 'waanderer_reviews');
+  if (name === 'resources') buildTbl('tbl-resources', get('waanderer_resources'), ['title','type'], 'waanderer_resources');
 }
 
-function buildTbl(wrId,items,fields,key){ const w=document.getElementById(wrId); if(!items.length){ w.innerHTML='<p style="color:var(--text-dim);font-size:0.62rem;padding:1rem 0">Nothing here yet.</p>'; return; } w.innerHTML=`<table class="data-tbl"><thead><tr>${fields.map(f=>`<th>${f.toUpperCase()}</th>`).join('')}<th>ACTIONS</th></tr></thead><tbody>${items.map((item,i)=>`<tr>${fields.map(f=>`<td>${item[f]||'—'}</td>`).join('')}<td><button class="btn btn-danger" onclick="delItem('${key}',${i})" style="font-size:0.5rem;padding:0.3rem 0.6rem">✕ Delete</button></td></tr>`).join('')}</tbody></table>`; }
+function buildTbl(wrId, items, fields, key) {
+  const w = document.getElementById(wrId);
+  if (!items.length) { w.innerHTML='<p style="color:var(--text-dim);font-size:0.88rem;padding:1rem 0">Nothing here yet.</p>'; return; }
+  w.innerHTML = `<table class="data-tbl"><thead><tr>
+    ${fields.map(f=>`<th>${f.toUpperCase()}</th>`).join('')}<th>ACTIONS</th>
+  </tr></thead><tbody>
+    ${items.map((item,i)=>`<tr>
+      ${fields.map(f=>`<td>${item[f]||'—'}</td>`).join('')}
+      <td><button class="btn btn-danger" onclick="delItem('${key}',${i})" style="font-size:0.82rem;padding:0.3rem 0.6rem">✕ Delete</button></td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
 
-function delItem(key,idx){ if(!confirm('Delete this item?')) return; const a=JSON.parse(localStorage.getItem(key)||'[]'); a.splice(idx,1); localStorage.setItem(key,JSON.stringify(a)); updateStats(); const act=document.querySelector('.sb-btn.active'); if(act){ const pname=act.onclick.toString().match(/'(\w+)'/)?.[1]; if(pname) populatePanel(pname); } }
+function delItem(key, idx) {
+  if (!confirm('Delete this item?')) return;
+  const a = JSON.parse(localStorage.getItem(key)||'[]');
+  a.splice(idx,1);
+  localStorage.setItem(key, JSON.stringify(a));
+  updateStats();
+  const act = document.querySelector('.sb-btn.active');
+  if (act) {
+    const pname = act.getAttribute('onclick').match(/'(\w+)'/)?.[1];
+    if (pname) populatePanel(pname);
+  }
+}
 
-function exportData(){ const data={projects:get('waanderer_projects'),decks:get('waanderer_decks'),boards:get('waanderer_boards'),photos:get('waanderer_photos'),reviews:get('waanderer_reviews'),resources:get('waanderer_resources'),exported:new Date().toISOString()}; const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'})); a.download=`just-saffron-backup-${new Date().toISOString().slice(0,10)}.json`; a.click(); }
+function exportData() {
+  const data = {
+    projects:  get('waanderer_projects'),
+    decks:     get('waanderer_decks'),
+    reviews:   get('waanderer_reviews'),
+    resources: get('waanderer_resources'),
+    exported:  new Date().toISOString()
+  };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download = `just-saffron-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
 
-function importData(e){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ try{ const d=JSON.parse(ev.target.result); if(confirm(`Import backup from ${d.exported?new Date(d.exported).toLocaleDateString():'unknown date'}? This will REPLACE current data.`)){ if(d.projects)  localStorage.setItem('waanderer_projects',JSON.stringify(d.projects)); if(d.decks)     localStorage.setItem('waanderer_decks',JSON.stringify(d.decks)); if(d.boards)    localStorage.setItem('waanderer_boards',JSON.stringify(d.boards)); if(d.photos)    localStorage.setItem('waanderer_photos',JSON.stringify(d.photos)); if(d.reviews)   localStorage.setItem('waanderer_reviews',JSON.stringify(d.reviews)); if(d.resources) localStorage.setItem('waanderer_resources',JSON.stringify(d.resources)); alert('✓ Import successful!'); updateStats(); } }catch{ alert('Invalid backup file.'); } }; r.readAsText(f); e.target.value=''; }
+function importData(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try {
+      const d = JSON.parse(ev.target.result);
+      const dateStr = d.exported ? new Date(d.exported).toLocaleDateString() : 'unknown date';
+      if (confirm(`Import backup from ${dateStr}? This will REPLACE current data.`)) {
+        if (d.projects)  localStorage.setItem('waanderer_projects',  JSON.stringify(d.projects));
+        if (d.decks)     localStorage.setItem('waanderer_decks',     JSON.stringify(d.decks));
+        if (d.reviews)   localStorage.setItem('waanderer_reviews',   JSON.stringify(d.reviews));
+        if (d.resources) localStorage.setItem('waanderer_resources', JSON.stringify(d.resources));
+        alert('✓ Import successful!');
+        updateStats();
+      }
+    } catch { alert('Invalid backup file.'); }
+  };
+  r.readAsText(f);
+  e.target.value = '';
+}
 
-function clearAll(){ if(!confirm('Clear ALL data? This cannot be undone.')) return; ['waanderer_projects','waanderer_decks','waanderer_boards','waanderer_photos','waanderer_reviews','waanderer_resources'].forEach(k=>localStorage.removeItem(k)); updateStats(); alert('All data cleared.'); }
+function clearAll() {
+  if (!confirm('Clear ALL data? This cannot be undone.')) return;
+  ['waanderer_projects','waanderer_decks','waanderer_reviews','waanderer_resources'].forEach(k => localStorage.removeItem(k));
+  updateStats();
+  alert('All data cleared.');
+}
 
 init();
 </script>

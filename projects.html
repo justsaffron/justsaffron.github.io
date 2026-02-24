@@ -129,8 +129,6 @@
   <ul class="nav-links">
     <li><a href="projects.html" class="active">Projects</a></li>
     <li><a href="mtg.html">Decks</a></li>
-    <li><a href="moodboards.html">Moodboards</a></li>
-    <li><a href="photography.html">Photography</a></li>
     <li><a href="reviews.html">Reviews</a></li>
     <li><a href="resources.html">Resources</a></li>
     <li><a href="editor.html" class="edit-link">✦ Edit</a></li>
@@ -430,13 +428,13 @@ function render() {
           <div class="proj-progress-label">${p.progress}% complete</div>
           <div class="proj-progress-bar"><div class="proj-progress-fill" style="width:0%" data-w="${p.progress}%"></div></div>
         </div>
-        <div class="encrypt-toggle">
+        ${checkEditAuth() ? `<div class="encrypt-toggle">
           <label class="toggle-sw" title="Encrypt project text">
             <input type="checkbox" ${enc?'checked':''} onchange="toggleEncrypt(${ri})">
             <div class="toggle-track"></div>
           </label>
           <label onclick="toggleEncrypt(${ri})">Encrypt</label>
-        </div>
+        </div>` : ''}
       </div>
       <div class="proj-body">
         <div class="proj-fields-row">

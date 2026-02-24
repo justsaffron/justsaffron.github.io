@@ -7,18 +7,61 @@
 <link href="https://fonts.googleapis.com/css2?family=Lilex:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
-.r-tabs { display:flex; gap:0; margin-bottom:2.5rem; border-bottom:1px solid var(--border); }
-.rtab { padding:0.8rem 1.8rem; font-family:var(--font); font-size:0.57rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--text-dim); cursor:pointer; border:none; background:none; border-bottom:2px solid transparent; margin-bottom:-1px; transition:all 0.2s; }
+.r-tabs {
+  display:flex; gap:0; margin-bottom:2.5rem;
+  border-bottom:1px solid var(--border); flex-wrap:wrap;
+}
+.rtab {
+  padding:0.8rem 1.6rem; font-family:var(--font);
+  font-size:var(--label-xs); letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--text-dim); cursor:pointer; border:none; background:none;
+  border-bottom:2px solid transparent; margin-bottom:-1px; transition:all 0.2s;
+}
 .rtab.active { color:var(--white); border-bottom-color:var(--saffron); }
 .rtab:hover:not(.active) { color:var(--text-warm); }
-.r-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1px; background:var(--border-sky); }
-.r-card { background:var(--navy-mid); padding:1.8rem; display:flex; flex-direction:column; gap:0.8rem; }
-.r-type  { font-size:0.48rem; letter-spacing:0.32em; text-transform:uppercase; color:var(--sky); }
-.r-title { font-size:1rem; font-weight:400; color:var(--white); line-height:1.3; }
-.r-author{ font-size:0.6rem; color:var(--text-dim); }
-.r-body  { font-size:0.67rem; font-weight:300; line-height:1.82; color:var(--text-muted); flex:1; }
-.r-foot  { display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:0.8rem; font-size:0.48rem; letter-spacing:0.18em; color:var(--text-dim); }
-.r-add { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem; min-height:200px; border:1px dashed rgba(125,183,202,0.15); background:transparent; color:var(--text-dim); font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; transition:all 0.3s; font-family:var(--font); padding:1.8rem; }
+
+.r-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr));
+  gap:1px; background:var(--border-sky);
+}
+.r-card {
+  background:var(--navy-mid); padding:1.8rem;
+  display:flex; flex-direction:column; gap:0.8rem;
+  position:relative; overflow:hidden;
+}
+.r-card::before {
+  content:''; position:absolute; left:0; top:0; width:3px; height:0;
+  background:var(--saffron); transition:height 0.35s;
+}
+.r-card:hover::before { height:100%; }
+.r-badge {
+  font-size:var(--label-xs); letter-spacing:0.32em; text-transform:uppercase;
+  display:inline-block; padding:0.12rem 0.55rem;
+  border:1px solid; border-radius:1px;
+}
+.badge-books   { color:#7DB7CA; border-color:rgba(125,183,202,0.3); }
+.badge-games   { color:#E8AA44; border-color:rgba(232,170,68,0.3); }
+.badge-movies  { color:#b03020; border-color:rgba(176,48,32,0.3); }
+.badge-shows   { color:#9060c0; border-color:rgba(144,96,192,0.3); }
+.badge-manga   { color:#c08040; border-color:rgba(192,128,64,0.3); }
+.badge-anime   { color:#40a080; border-color:rgba(64,160,128,0.3); }
+
+.r-title  { font-size:1.05rem; font-weight:400; color:var(--white); line-height:1.3; }
+.r-author { font-size:var(--body-sm); color:var(--text-dim); }
+.r-body   { font-size:var(--body-sm); font-weight:300; line-height:1.85; color:var(--text-muted); flex:1; }
+.r-foot   {
+  display:flex; justify-content:space-between; align-items:center;
+  border-top:1px solid var(--border); padding-top:0.8rem;
+  font-size:var(--label-xs); letter-spacing:0.18em; color:var(--text-dim);
+}
+
+.r-add {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:0.8rem; min-height:220px; border:1px dashed rgba(125,183,202,0.15);
+  background:transparent; color:var(--text-dim); font-size:var(--body-sm);
+  letter-spacing:0.2em; text-transform:uppercase; cursor:pointer;
+  transition:all 0.3s; font-family:var(--font); padding:1.8rem;
+}
 .r-add:hover { border-color:rgba(232,170,68,0.4); color:var(--saffron); background:var(--saffron-dim); }
 </style>
 </head>
@@ -26,43 +69,69 @@
 <nav>
   <a class="nav-logo" href="index.html">Just Saffron</a>
   <ul class="nav-links">
-    <li><a href="projects.html">Projects</a></li><li><a href="mtg.html">Decks</a></li>
-    <li><a href="moodboards.html">Moodboards</a></li><li><a href="photography.html">Photography</a></li>
-    <li><a href="reviews.html" class="active">Reviews</a></li><li><a href="resources.html">Resources</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="mtg.html">Decks</a></li>
+    <li><a href="reviews.html" class="active">Reviews</a></li>
+    <li><a href="resources.html">Resources</a></li>
     <li><a href="editor.html" class="edit-link">✦ Edit</a></li>
   </ul>
 </nav>
+
 <div class="page-header">
   <div class="page-header-left">
-    <p class="page-eyebrow">05 · Reviews</p>
-    <h1 class="page-title">Books &amp; <em>Games</em></h1>
-    <p class="page-subtitle">Everything I've finished. What resonated, what didn't, and what I'm still thinking about weeks later.</p>
+    <p class="page-eyebrow">03 · Reviews</p>
+    <h1 class="page-title">Finished &amp; Rated</h1>
+    <p class="page-subtitle">Books, games, films, shows, manga, and anime — what resonated, what didn't, and what I'm still thinking about.</p>
   </div>
-  <button class="btn btn-primary" data-auth onclick="requireAuth(()=>openRModal())">+ Add Review</button>
+  <button class="btn btn-primary" onclick="requireAuth(()=>openRModal())">+ Add Review</button>
 </div>
+
 <div class="page-content">
-  <div class="r-tabs">
+  <div class="r-tabs" id="r-tabs">
     <button class="rtab active" onclick="switchTab('books',this)">Books</button>
     <button class="rtab" onclick="switchTab('games',this)">Games</button>
+    <button class="rtab" onclick="switchTab('movies',this)">Movies</button>
+    <button class="rtab" onclick="switchTab('shows',this)">Shows</button>
+    <button class="rtab" onclick="switchTab('manga',this)">Manga</button>
+    <button class="rtab" onclick="switchTab('anime',this)">Anime</button>
   </div>
   <div class="r-grid" id="r-grid"></div>
 </div>
-<footer class="site-footer"><div class="site-footer-sig">Just Saffron · <a href="index.html">← Home</a></div></footer>
 
+<footer class="site-footer">
+  <div class="site-footer-sig">Just Saffron · <a href="index.html">← Home</a></div>
+</footer>
+
+<!-- REVIEW MODAL -->
 <div class="modal-bg" id="r-modal">
   <div class="modal">
     <div class="modal-title" id="rmod-label">Add Review</div>
     <input type="hidden" id="r-edit-idx" value="-1">
     <div class="form-grid">
-      <div class="form-row"><label>Type</label><select id="r-type"><option value="books">Book</option><option value="games">Game</option></select></div>
-      <div class="form-row"><label>Rating</label>
-        <div class="star-input" id="r-star-input"><span onclick="setRStars(1)">★</span><span onclick="setRStars(2)">★</span><span onclick="setRStars(3)">★</span><span onclick="setRStars(4)">★</span><span onclick="setRStars(5)">★</span></div>
+      <div class="form-row">
+        <label>Category</label>
+        <select id="r-type">
+          <option value="books">Book</option>
+          <option value="games">Game</option>
+          <option value="movies">Movie</option>
+          <option value="shows">Show / Series</option>
+          <option value="manga">Manga</option>
+          <option value="anime">Anime</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Rating</label>
+        <div class="star-input" id="r-star-input">
+          <span onclick="setRStars(1)">★</span><span onclick="setRStars(2)">★</span>
+          <span onclick="setRStars(3)">★</span><span onclick="setRStars(4)">★</span>
+          <span onclick="setRStars(5)">★</span>
+        </div>
         <input type="hidden" id="r-rating" value="4">
       </div>
-      <div class="form-row"><label>Title *</label><input type="text" id="r-title" placeholder="e.g. Blood Meridian"></div>
-      <div class="form-row"><label>Author / Studio</label><input type="text" id="r-author" placeholder="e.g. Cormac McCarthy"></div>
-      <div class="form-row"><label>Finished (Month/Year)</label><input type="month" id="r-date"></div>
-      <div class="form-row"><label>Genre / Tags</label><input type="text" id="r-genre" placeholder="e.g. Literary Fiction, Philosophical"></div>
+      <div class="form-row"><label>Title *</label><input type="text" id="r-title" placeholder="e.g. Dune"></div>
+      <div class="form-row"><label>Author / Director / Studio</label><input type="text" id="r-author" placeholder="e.g. Frank Herbert"></div>
+      <div class="form-row"><label>Finished (Month / Year)</label><input type="month" id="r-date"></div>
+      <div class="form-row"><label>Genre / Tags</label><input type="text" id="r-genre" placeholder="e.g. Sci-Fi, World-building"></div>
     </div>
     <div class="form-row"><label>Review</label><textarea id="r-body" placeholder="Your honest thoughts..."></textarea></div>
     <div class="modal-actions">
@@ -74,27 +143,135 @@
 
 <script src="auth.js"></script>
 <script>
-const KEY='waanderer_reviews'; let activeTab='books';
-function getR(){ return JSON.parse(localStorage.getItem(KEY)||'[]'); }
+const KEY = 'waanderer_reviews';
+let activeTab = 'books';
+
+function getR() { return JSON.parse(localStorage.getItem(KEY)||'[]'); }
 function setR(a){ localStorage.setItem(KEY,JSON.stringify(a)); }
-function setRStars(n){ document.getElementById('r-rating').value=n; document.querySelectorAll('#r-star-input span').forEach((s,i)=>s.classList.toggle('on',i<n)); }
-function starsHTML(n){ return Array(5).fill(0).map((_,i)=>`<span style="color:${i<n?'var(--saffron)':'rgba(232,170,68,0.15)'}">★</span>`).join(''); }
-function fmtDate(d){ if(!d) return ''; const [y,m]=d.split('-'); return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(m)-1]+' '+y; }
 
-function saveReview(){ const idx=parseInt(document.getElementById('r-edit-idx').value); const r={ type:document.getElementById('r-type').value, title:document.getElementById('r-title').value.trim(), author:document.getElementById('r-author').value.trim(), rating:parseInt(document.getElementById('r-rating').value), date:document.getElementById('r-date').value, genre:document.getElementById('r-genre').value.trim(), body:document.getElementById('r-body').value.trim() }; if(!r.title) return alert('Please add a title.'); const a=getR(); if(idx>=0) a[idx]=r; else a.push(r); setR(a); closeModal('r-modal'); render(); }
-function deleteReview(idx){ if(!confirm('Delete?')) return; const a=getR(); a.splice(idx,1); setR(a); render(); }
-function editReview(idx){ const r=getR()[idx]; document.getElementById('r-edit-idx').value=idx; document.getElementById('rmod-label').textContent='Edit Review'; document.getElementById('r-type').value=r.type; document.getElementById('r-title').value=r.title; document.getElementById('r-author').value=r.author||''; document.getElementById('r-date').value=r.date||''; document.getElementById('r-genre').value=r.genre||''; document.getElementById('r-body').value=r.body||''; const n=r.rating||4; document.getElementById('r-rating').value=n; document.querySelectorAll('#r-star-input span').forEach((s,i)=>s.classList.toggle('on',i<n)); requireAuth(()=>openModal('r-modal')); }
-function switchTab(t,btn){ activeTab=t; document.querySelectorAll('.rtab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); render(); }
-
-function render(){ const all=getR(); const filtered=all.filter(r=>r.type===activeTab); const grid=document.getElementById('r-grid'); const cards=filtered.map(r=>{ const ri=all.indexOf(r); const tags=(r.genre||'').split(',').map(g=>`<span class="tag">${g.trim()}</span>`).join(''); return `<div class="r-card reveal"><div class="r-type">${r.type==='books'?'Book':'Game'}</div><div class="r-title">${r.title}</div>${r.author?`<div class="r-author">${r.author}</div>`:''}<div style="display:flex;gap:2px;font-size:0.9rem">${starsHTML(r.rating)}</div>${tags?`<div style="display:flex;flex-wrap:wrap;gap:0.3rem">${tags}</div>`:''} ${r.body?`<div class="r-body">${r.body}</div>`:''}<div class="r-foot"><span>${r.date?'Finished: '+fmtDate(r.date):''}</span><div style="display:flex;gap:0.5rem"><button class="btn" onclick="editReview(${ri})" style="font-size:0.5rem;padding:0.3rem 0.6rem">✎</button><button class="btn btn-danger" onclick="requireAuth(()=>deleteReview(${ri}))" style="font-size:0.5rem;padding:0.3rem 0.6rem">✕</button></div></div></div>`; }).join('');
-  grid.innerHTML=cards+`<button class="r-add" onclick="requireAuth(()=>openRModal())"><span style="font-size:1.6rem;font-weight:100">+</span><span>Add ${activeTab==='books'?'Book':'Game'}</span></button>`;
-  setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible')),50);
+function setRStars(n) {
+  document.getElementById('r-rating').value = n;
+  document.querySelectorAll('#r-star-input span').forEach((s,i) => s.classList.toggle('on', i<n));
 }
-function openRModal(){ document.getElementById('r-edit-idx').value='-1'; document.getElementById('rmod-label').textContent='Add Review'; ['r-title','r-author','r-genre','r-body'].forEach(f=>document.getElementById(f).value=''); document.getElementById('r-type').value=activeTab; document.getElementById('r-date').value=''; const n=4; document.getElementById('r-rating').value=n; document.querySelectorAll('#r-star-input span').forEach((s,i)=>s.classList.toggle('on',i<n)); openModal('r-modal'); }
-function openModal(id){ document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
-function closeModal(id){ document.getElementById(id).classList.remove('open'); document.getElementById('r-edit-idx').value='-1'; document.body.style.overflow=''; }
-document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',e=>{if(e.target===bg)closeModal(bg.id);}));
-document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-bg.open').forEach(m=>closeModal(m.id));});
+
+function starsHTML(n) {
+  return Array(5).fill(0).map((_,i) =>
+    `<span style="color:${i<n?'var(--saffron)':'rgba(232,170,68,0.15)'}; font-size:1.1rem">★</span>`).join('');
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  const [y,m] = d.split('-');
+  return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(m)-1] + ' ' + y;
+}
+
+const LABELS = {
+  books:'Book', games:'Game', movies:'Movie',
+  shows:'Show', manga:'Manga', anime:'Anime'
+};
+
+function badgeClass(t) { return 'r-badge badge-' + (t||'books'); }
+
+function saveReview() {
+  const idx = parseInt(document.getElementById('r-edit-idx').value);
+  const r = {
+    type:   document.getElementById('r-type').value,
+    title:  document.getElementById('r-title').value.trim(),
+    author: document.getElementById('r-author').value.trim(),
+    rating: parseInt(document.getElementById('r-rating').value),
+    date:   document.getElementById('r-date').value,
+    genre:  document.getElementById('r-genre').value.trim(),
+    body:   document.getElementById('r-body').value.trim(),
+  };
+  if (!r.title) return alert('Please add a title.');
+  const a = getR();
+  if (idx >= 0) a[idx] = r; else a.push(r);
+  setR(a); closeModal('r-modal'); render();
+}
+
+function deleteReview(idx) {
+  if (!confirm('Delete this review?')) return;
+  const a = getR(); a.splice(idx,1); setR(a); render();
+}
+
+function editReview(idx) {
+  const r = getR()[idx];
+  document.getElementById('r-edit-idx').value = idx;
+  document.getElementById('rmod-label').textContent = 'Edit Review';
+  document.getElementById('r-type').value   = r.type;
+  document.getElementById('r-title').value  = r.title;
+  document.getElementById('r-author').value = r.author||'';
+  document.getElementById('r-date').value   = r.date||'';
+  document.getElementById('r-genre').value  = r.genre||'';
+  document.getElementById('r-body').value   = r.body||'';
+  const n = r.rating||4;
+  document.getElementById('r-rating').value = n;
+  document.querySelectorAll('#r-star-input span').forEach((s,i) => s.classList.toggle('on', i<n));
+  requireAuth(() => openModal('r-modal'));
+}
+
+function switchTab(t, btn) {
+  activeTab = t;
+  document.querySelectorAll('.rtab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function render() {
+  const all = getR();
+  const filtered = all.filter(r => r.type === activeTab);
+  const grid = document.getElementById('r-grid');
+
+  const tabLabel = LABELS[activeTab] || activeTab;
+
+  const cards = filtered.map(r => {
+    const ri   = all.indexOf(r);
+    const tags = (r.genre||'').split(',')
+      .map(g => g.trim()).filter(Boolean)
+      .map(g => `<span class="tag">${g}</span>`).join('');
+    return `<div class="r-card reveal">
+      <div><span class="${badgeClass(r.type)}">${LABELS[r.type]||r.type}</span></div>
+      <div class="r-title">${r.title}</div>
+      ${r.author ? `<div class="r-author">${r.author}</div>` : ''}
+      <div style="display:flex;gap:2px">${starsHTML(r.rating)}</div>
+      ${tags ? `<div style="display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:0.2rem">${tags}</div>` : ''}
+      ${r.body ? `<div class="r-body">${r.body}</div>` : ''}
+      <div class="r-foot">
+        <span>${r.date ? 'Finished: ' + fmtDate(r.date) : ''}</span>
+        <div style="display:flex;gap:0.5rem">
+          <button class="btn" onclick="requireAuth(()=>editReview(${ri}))" style="font-size:0.82rem;padding:0.3rem 0.65rem">✎</button>
+          <button class="btn btn-danger" onclick="requireAuth(()=>deleteReview(${ri}))" style="font-size:0.82rem;padding:0.3rem 0.65rem">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  grid.innerHTML = cards +
+    `<button class="r-add" onclick="requireAuth(()=>openRModal())">
+      <span style="font-size:1.6rem;font-weight:100">+</span>
+      <span>Add ${tabLabel}</span>
+    </button>`;
+
+  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible')), 50);
+}
+
+function openRModal() {
+  document.getElementById('r-edit-idx').value = '-1';
+  document.getElementById('rmod-label').textContent = 'Add Review';
+  ['r-title','r-author','r-genre','r-body'].forEach(f => document.getElementById(f).value='');
+  document.getElementById('r-type').value = activeTab;
+  document.getElementById('r-date').value = '';
+  const n = 4;
+  document.getElementById('r-rating').value = n;
+  document.querySelectorAll('#r-star-input span').forEach((s,i) => s.classList.toggle('on', i<n));
+  openModal('r-modal');
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.getElementById('r-edit-idx').value='-1'; document.body.style.overflow=''; }
+document.querySelectorAll('.modal-bg').forEach(bg => bg.addEventListener('click', e => { if(e.target===bg) closeModal(bg.id); }));
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-bg.open').forEach(m => closeModal(m.id)); });
+
 render();
 </script>
 </body>

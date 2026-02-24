@@ -67,8 +67,6 @@
   <ul class="nav-links">
     <li><a href="projects.html">Projects</a></li>
     <li><a href="mtg.html">Decks</a></li>
-    <li><a href="moodboards.html">Moodboards</a></li>
-    <li><a href="photography.html">Photography</a></li>
     <li><a href="reviews.html">Reviews</a></li>
     <li><a href="resources.html">Resources</a></li>
     <li><a href="editor.html" class="edit-link">✦ Edit</a></li>
@@ -145,7 +143,7 @@
     <p class="hero-motto">Journey Before Destination</p>
     <div class="hero-divider"></div>
     <!-- Solid title — no outline -->
-    <h1 class="hero-title">Just<br><span class="accent">Saffron</span></h1>
+    <h1 class="hero-title">Just<br>Saffron</h1>
     <p class="hero-sub">A living record of products built, decks played, art collected, photographs taken, and things worth remembering.</p>
     <div class="hero-cta">
       <a href="projects.html" class="btn btn-primary">View Projects →</a>
@@ -159,10 +157,8 @@
   <div class="nav-cards">
     <a class="nav-card" href="projects.html"><div class="nav-card-num">01</div><div class="nav-card-icon">⬡</div><div class="nav-card-title">PM Projects</div><div class="nav-card-desc">Product management work — problems, approaches, timelines, and key learnings.</div><div class="nav-card-arrow">Enter →</div></a>
     <a class="nav-card" href="mtg.html"><div class="nav-card-num">02</div><div class="nav-card-icon">⬢</div><div class="nav-card-title">MTG Decks</div><div class="nav-card-desc">Commander and Modern decks built, tested, and iterated. Full decklists with ratings.</div><div class="nav-card-arrow">Enter →</div></a>
-    <a class="nav-card" href="moodboards.html"><div class="nav-card-num">03</div><div class="nav-card-icon">◈</div><div class="nav-card-title">Moodboards</div><div class="nav-card-desc">Collections of art, illustration, and visual references that shape how I see the world.</div><div class="nav-card-arrow">Enter →</div></a>
-    <a class="nav-card" href="photography.html"><div class="nav-card-num">04</div><div class="nav-card-icon">◎</div><div class="nav-card-title">Photography</div><div class="nav-card-desc">Personal photography from travels and everyday observation.</div><div class="nav-card-arrow">Enter →</div></a>
-    <a class="nav-card" href="reviews.html"><div class="nav-card-num">05</div><div class="nav-card-icon">◇</div><div class="nav-card-title">Reviews</div><div class="nav-card-desc">Books and games I've finished — what resonated, what didn't.</div><div class="nav-card-arrow">Enter →</div></a>
-    <a class="nav-card" href="resources.html"><div class="nav-card-num">06</div><div class="nav-card-icon">◉</div><div class="nav-card-title">Resources</div><div class="nav-card-desc">Articles I've written, frameworks I return to, and links worth keeping.</div><div class="nav-card-arrow">Enter →</div></a>
+    <a class="nav-card" href="reviews.html"><div class="nav-card-num">03</div><div class="nav-card-icon">◇</div><div class="nav-card-title">Reviews</div><div class="nav-card-desc">Books, games, movies, shows, manga and anime — what resonated, what didn't.</div><div class="nav-card-arrow">Enter →</div></a>
+    <a class="nav-card" href="resources.html"><div class="nav-card-num">04</div><div class="nav-card-icon">◉</div><div class="nav-card-title">Resources</div><div class="nav-card-desc">Articles I've written, frameworks I return to, and links worth keeping.</div><div class="nav-card-arrow">Enter →</div></a>
   </div>
 </div>
 
@@ -176,4 +172,8 @@
   <div style="font-size:0.64rem;letter-spacing:0.2em;color:var(--text-dim)">Journey Before Destination</div>
 </footer>
 </body>
+<!-- One-time cleanup: remove moodboard/photography data from removed pages -->
+<script>
+['waanderer_boards','waanderer_photos'].forEach(k => localStorage.removeItem(k));
+</script>
 </html>
