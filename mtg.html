@@ -1,114 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MTG Decks — The Waanderer's Log</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTG Decks — Just Saffron</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lilex:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
-.deck-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1px; background: var(--border);
-}
+.deck-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1px; background:var(--border-sky); }
 
-.deck-card {
-  background: var(--sand-dark); padding: 2rem;
-  position: relative; overflow: hidden;
-  display: flex; flex-direction: column; gap: 0.9rem;
-}
+.deck-card { background:var(--navy-mid); display:flex; flex-direction:column; position:relative; overflow:hidden; transition:background 0.3s; }
+.deck-card:hover { background:rgba(48,55,99,0.7); }
 
-.deck-color-bar {
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-}
+.deck-color-bar { height:3px; }
 
-.deck-format {
-  font-size: 0.52rem; letter-spacing: 0.3em;
-  text-transform: uppercase; color: var(--sand-warm);
-}
+.deck-commander-img { width:100%; aspect-ratio:1/1; object-fit:cover; display:block; filter:saturate(0.85); transition:filter 0.4s,transform 0.5s; }
+.deck-card:hover .deck-commander-img { filter:saturate(1.05); transform:scale(1.03); }
+.deck-img-placeholder { width:100%; aspect-ratio:1/1; background:linear-gradient(135deg,var(--navy-deep),var(--navy-light)); display:flex; align-items:center; justify-content:center; color:var(--text-dim); font-size:2rem; flex-direction:column; gap:0.5rem; cursor:pointer; transition:background 0.3s; }
+.deck-img-placeholder:hover { background:linear-gradient(135deg,var(--navy-mid),var(--blue)); color:var(--sky); }
+.deck-img-placeholder span { font-size:0.55rem; letter-spacing:0.2em; text-transform:uppercase; }
 
-.deck-name { font-size: 1.15rem; font-weight: 400; color: var(--white); line-height: 1.2; }
-.deck-archetype { font-size: 0.63rem; color: var(--text-dim); font-style: italic; }
+.deck-body { padding:1.5rem; display:flex; flex-direction:column; gap:0.75rem; flex:1; }
+.deck-format  { font-size:0.5rem; letter-spacing:0.32em; text-transform:uppercase; color:var(--sky); }
+.deck-name    { font-size:1.05rem; font-weight:400; color:var(--white); line-height:1.2; }
+.deck-archetype { font-size:0.62rem; color:var(--text-dim); font-style:italic; }
 
-.mana-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.mana-row { display:flex; gap:0.4rem; flex-wrap:wrap; }
+.mana { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.57rem; font-weight:700; border:1px solid rgba(255,255,255,0.15); }
+.mana-W{background:#f9f6ee;color:#3a3020} .mana-U{background:#0e68ab;color:#fff} .mana-B{background:#150b00;color:#c4b5a0;border-color:#c4b5a0} .mana-R{background:#d3202a;color:#fff} .mana-G{background:#00733e;color:#fff} .mana-C{background:#ccc2c0;color:#333}
 
-.mana {
-  width: 24px; height: 24px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.58rem; font-weight: 700;
-  border: 1px solid rgba(255,255,255,0.15);
-}
+.deck-notes { font-size:0.64rem; font-weight:300; line-height:1.75; color:var(--text-muted); flex:1; }
 
-.mana-W { background: #f9f6ee; color: #3a3020; }
-.mana-U { background: #0e68ab; color: #fff; }
-.mana-B { background: #150b00; color: #c4b5a0; border-color: #c4b5a0; }
-.mana-R { background: #d3202a; color: #fff; }
-.mana-G { background: #00733e; color: #fff; }
-.mana-C { background: #ccc2c0; color: #333; }
+.deck-stats { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; border-top:1px solid var(--border); padding-top:1rem; margin-top:auto; }
+.deck-stat label { display:block; font-size:0.47rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--text-dim); margin-bottom:0.2rem; }
+.deck-stat span  { font-size:0.68rem; color:var(--text-warm); }
+.deck-stat.full  { grid-column:1/-1; }
 
-.deck-notes {
-  font-size: 0.65rem; font-weight: 300; line-height: 1.7;
-  color: var(--text-muted); flex: 1;
-}
+.deck-actions { display:flex; gap:0.6rem; padding-top:1rem; border-top:1px solid var(--border); }
 
-.deck-stats {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;
-  border-top: 1px solid var(--border); padding-top: 1rem;
-}
+.deck-add-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem; min-height:250px; border:1px dashed rgba(125,183,202,0.15); background:transparent; color:var(--text-dim); font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; transition:all 0.3s; font-family:var(--font); }
+.deck-add-card:hover { border-color:rgba(232,170,68,0.4); color:var(--saffron); background:var(--saffron-dim); }
 
-.deck-stat label {
-  display: block; font-size: 0.48rem; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--text-dim);
-}
+/* star rating for deck */
+.deck-rating { display:flex; gap:2px; }
+.deck-star-filled { color:var(--saffron); font-size:0.9rem; }
+.deck-star-empty  { color:rgba(232,170,68,0.15); font-size:0.9rem; }
 
-.deck-stat span { font-size: 0.68rem; color: var(--text-warm); }
+/* color bar helpers */
+.bar-W{background:#f9f6ee} .bar-U{background:#0e68ab} .bar-B{background:#150b00} .bar-R{background:#d3202a} .bar-G{background:#00733e}
+.bar-WU{background:linear-gradient(90deg,#f9f6ee,#0e68ab)} .bar-UB{background:linear-gradient(90deg,#0e68ab,#150b00)} .bar-BR{background:linear-gradient(90deg,#150b00,#d3202a)} .bar-RG{background:linear-gradient(90deg,#d3202a,#00733e)} .bar-GW{background:linear-gradient(90deg,#00733e,#f9f6ee)}
+.bar-WUB{background:linear-gradient(90deg,#f9f6ee,#0e68ab,#150b00)} .bar-UBR{background:linear-gradient(90deg,#0e68ab,#150b00,#d3202a)} .bar-BRG{background:linear-gradient(90deg,#150b00,#d3202a,#00733e)} .bar-RGW{background:linear-gradient(90deg,#d3202a,#00733e,#f9f6ee)} .bar-GWU{background:linear-gradient(90deg,#00733e,#f9f6ee,#0e68ab)}
+.bar-RW{background:linear-gradient(90deg,#d3202a,#f9f6ee)} .bar-default{background:linear-gradient(90deg,var(--navy-light),var(--blue))}
 
-.deck-actions {
-  display: flex; gap: 0.6rem; padding-top: 1rem;
-  border-top: 1px solid var(--border);
-}
-
-.deck-add-card {
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: 0.8rem; min-height: 200px;
-  border: 1px dashed rgba(232,168,74,0.15); background: transparent;
-  color: var(--text-dim); font-size: 0.6rem; letter-spacing: 0.2em;
-  text-transform: uppercase; cursor: pointer; transition: all 0.3s;
-}
-
-.deck-add-card:hover {
-  border-color: rgba(232,168,74,0.4); color: var(--sand-gold);
-  background: rgba(232,168,74,0.03);
-}
-
-/* color gradient helpers */
-.bar-WU  { background: linear-gradient(90deg, #f9f6ee, #0e68ab); }
-.bar-UB  { background: linear-gradient(90deg, #0e68ab, #150b00); }
-.bar-BR  { background: linear-gradient(90deg, #150b00, #d3202a); }
-.bar-RG  { background: linear-gradient(90deg, #d3202a, #00733e); }
-.bar-GW  { background: linear-gradient(90deg, #00733e, #f9f6ee); }
-.bar-WUB { background: linear-gradient(90deg, #f9f6ee, #0e68ab, #150b00); }
-.bar-UBR { background: linear-gradient(90deg, #0e68ab, #150b00, #d3202a); }
-.bar-BRG { background: linear-gradient(90deg, #150b00, #d3202a, #00733e); }
-.bar-RGW { background: linear-gradient(90deg, #d3202a, #00733e, #f9f6ee); }
-.bar-GWU { background: linear-gradient(90deg, #00733e, #f9f6ee, #0e68ab); }
-.bar-R   { background: #d3202a; }
-.bar-U   { background: #0e68ab; }
-.bar-B   { background: #150b00; }
-.bar-G   { background: #00733e; }
-.bar-W   { background: #f9f6ee; }
-.bar-RW  { background: linear-gradient(90deg, #d3202a, #f9f6ee); }
+/* MODAL – commander image upload preview */
+.cmd-img-preview { width:100%; aspect-ratio:1/1; object-fit:cover; display:block; margin-bottom:0.8rem; max-height:200px; }
+.cmd-img-upload-btn { display:flex; align-items:center; justify-content:center; gap:0.5rem; width:100%; padding:1rem; border:1px dashed rgba(125,183,202,0.25); color:var(--text-muted); font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; background:none; font-family:var(--font); transition:all 0.3s; }
+.cmd-img-upload-btn:hover { border-color:rgba(232,170,68,0.4); color:var(--saffron); }
 </style>
 </head>
 <body>
-
 <nav>
-  <a class="nav-logo" href="index.html">The Waanderer's Log</a>
+  <a class="nav-logo" href="index.html">Just Saffron</a>
   <ul class="nav-links">
     <li><a href="projects.html">Projects</a></li>
-    <li><a href="mtg.html" class="active">MTG</a></li>
+    <li><a href="mtg.html" class="active">Decks</a></li>
     <li><a href="moodboards.html">Moodboards</a></li>
     <li><a href="photography.html">Photography</a></li>
     <li><a href="reviews.html">Reviews</a></li>
@@ -116,48 +71,56 @@
     <li><a href="editor.html" class="edit-link">✦ Edit</a></li>
   </ul>
 </nav>
-
 <div class="page-header">
   <div class="page-header-left">
     <p class="page-eyebrow">02 · Magic the Gathering</p>
     <h1 class="page-title">The <em>Decks</em></h1>
-    <p class="page-subtitle">Every deck built, tuned, tested, and retired. Commanders, archetypes, win rates, and notes on what the deck is trying to do.</p>
+    <p class="page-subtitle">Every deck built, tuned, and tested. Commanders, archetypes, bracket numbers, favorite cards, and honest ratings.</p>
   </div>
-  <button class="btn btn-primary" onclick="openModal('deck-modal')">+ Add Deck</button>
+  <button class="btn btn-primary" data-auth onclick="requireAuth(()=>openModal('deck-modal'))">+ Add Deck</button>
 </div>
-
 <div class="page-content">
   <div class="deck-grid" id="deck-list"></div>
 </div>
-
 <footer class="site-footer">
-  <div class="site-footer-sig">The Waanderer's Log · <a href="index.html">← Home</a></div>
-  <a href="editor.html" class="btn btn-primary">✦ Edit Content</a>
+  <div class="site-footer-sig">Just Saffron · <a href="index.html">← Home</a></div>
 </footer>
 
 <!-- DECK MODAL -->
 <div class="modal-bg" id="deck-modal">
   <div class="modal">
-    <div class="modal-title" id="deck-modal-label">Add MTG Deck</div>
-    <input type="hidden" id="deck-edit-idx" value="-1">
+    <div class="modal-title" id="dmod-label">Add MTG Deck</div>
+    <input type="hidden" id="d-edit-idx" value="-1">
+
+    <!-- Commander image upload -->
+    <div class="form-row">
+      <label>Commander Image (square crop applied automatically)</label>
+      <div id="cmd-preview-wrap" style="display:none"><img id="cmd-preview" class="cmd-img-preview" src="" alt="Commander"></div>
+      <button type="button" class="cmd-img-upload-btn" onclick="document.getElementById('cmd-img-input').click()">
+        <span style="font-size:1rem">+</span> Upload Commander Image
+      </button>
+      <input type="file" id="cmd-img-input" accept="image/*" style="display:none" onchange="handleCmdImg(event)">
+    </div>
+    <input type="hidden" id="d-img" value="">
+
     <div class="form-grid">
       <div class="form-row"><label>Deck Name *</label><input type="text" id="d-name" placeholder="e.g. Umbris, Fear Manifest"></div>
       <div class="form-row"><label>Format</label>
-        <select id="d-format">
-          <option>Commander / EDH</option><option>Modern</option>
-          <option>Legacy</option><option>Standard</option>
-          <option>Pioneer</option><option>Pauper</option><option>Draft</option>
-        </select>
+        <select id="d-format"><option>Commander / EDH</option><option>Modern</option><option>Legacy</option><option>Standard</option><option>Pioneer</option><option>Pauper</option><option>Draft</option></select>
       </div>
       <div class="form-row"><label>Archetype / Strategy</label><input type="text" id="d-archetype" placeholder="e.g. Mill · Control"></div>
       <div class="form-row"><label>Colors (e.g. UB, RGW)</label><input type="text" id="d-colors" placeholder="W U B R G C"></div>
-      <div class="form-row"><label>Win Rate %</label><input type="text" id="d-winrate" placeholder="e.g. ~42%"></div>
-      <div class="form-row"><label>Avg CMC</label><input type="text" id="d-cmc" placeholder="e.g. 2.8"></div>
-      <div class="form-row"><label>Card Count</label><input type="number" id="d-cards" value="100"></div>
+      <div class="form-row"><label>Bracket Number (1–5)</label><input type="number" id="d-bracket" min="1" max="5" placeholder="e.g. 3"></div>
+      <div class="form-row"><label>Favorite Card</label><input type="text" id="d-fav" placeholder="e.g. Tergrid, God of Fright"></div>
       <div class="form-row"><label>Status</label>
-        <select id="d-status">
-          <option>Tuned</option><option>Testing</option><option>Brewing</option><option>Retired</option>
-        </select>
+        <select id="d-status"><option>Tuned</option><option>Testing</option><option>Brewing</option><option>Retired</option></select>
+      </div>
+      <div class="form-row">
+        <label>Deck Rating (click stars)</label>
+        <div class="star-input" id="d-star-input" data-val="0">
+          <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
+        </div>
+        <input type="hidden" id="d-rating" value="0">
       </div>
     </div>
     <div class="form-row"><label>Deck Notes / Strategy</label><textarea id="d-notes" placeholder="What is this deck trying to do? What's the game plan?"></textarea></div>
@@ -169,142 +132,120 @@
   </div>
 </div>
 
+<input type="file" id="cmd-img-input-hidden" accept="image/*" style="display:none">
+<script src="auth.js"></script>
 <script>
-const KEY = 'waanderer_decks';
+const KEY='waanderer_decks';
+function getD(){ return JSON.parse(localStorage.getItem(KEY)||'[]'); }
+function setD(a){ localStorage.setItem(KEY,JSON.stringify(a)); }
 
-function getDecks() { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
-function setDecks(a) { localStorage.setItem(KEY, JSON.stringify(a)); }
-
-function manaBar(colors) {
-  const c = colors.toUpperCase().replace(/\s/g,'');
-  if (c.length === 1) return `bar-${c}`;
-  if (c.length === 2) return `bar-${c}`;
-  if (c.length === 3) return `bar-${c}`;
-  return '';
+function setStars(n){
+  document.getElementById('d-rating').value=n;
+  document.querySelectorAll('#d-star-input span').forEach((s,i)=>{ s.classList.toggle('on',i<n); });
 }
 
-function manaSymbols(colors) {
-  return colors.toUpperCase().split('').filter(c => 'WUBRGC'.includes(c))
-    .map(c => `<div class="mana mana-${c}">${c}</div>`).join('');
+function handleCmdImg(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    // crop to square via canvas
+    const img=new Image();
+    img.onload=()=>{
+      const size=Math.min(img.width,img.height);
+      const canvas=document.createElement('canvas'); canvas.width=400; canvas.height=400;
+      const ctx=canvas.getContext('2d');
+      const sx=(img.width-size)/2, sy=(img.height-size)/2;
+      ctx.drawImage(img,sx,sy,size,size,0,0,400,400);
+      const data=canvas.toDataURL('image/jpeg',0.85);
+      document.getElementById('d-img').value=data;
+      document.getElementById('cmd-preview').src=data;
+      document.getElementById('cmd-preview-wrap').style.display='block';
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
 }
 
-function statusColor(s) {
-  if (s === 'Tuned') return 'var(--sand-gold)';
-  if (s === 'Testing') return 'var(--sky-light)';
-  if (s === 'Retired') return 'var(--text-dim)';
-  return 'var(--terra-light)';
+function barClass(colors){
+  const c=(colors||'').toUpperCase().replace(/\s/g,'');
+  const map={'W':'bar-W','U':'bar-U','B':'bar-B','R':'bar-R','G':'bar-G','WU':'bar-WU','UB':'bar-UB','BR':'bar-BR','RG':'bar-RG','GW':'bar-GW','RW':'bar-RW','WUB':'bar-WUB','UBR':'bar-UBR','BRG':'bar-BRG','RGW':'bar-RGW','GWU':'bar-GWU'};
+  return map[c]||'bar-default';
 }
 
-function render() {
-  const decks = getDecks();
-  const list = document.getElementById('deck-list');
+function manaSymbols(colors){ return (colors||'').toUpperCase().split('').filter(c=>'WUBRGC'.includes(c)).map(c=>`<div class="mana mana-${c}">${c}</div>`).join(''); }
 
-  const cards = decks.map((d, i) => {
-    const barClass = manaBar(d.colors || '');
-    return `
-    <div class="deck-card reveal">
-      <div class="deck-color-bar ${barClass}"></div>
-      <div class="deck-format">${d.format}</div>
-      <div class="deck-name">${d.name}</div>
-      ${d.archetype ? `<div class="deck-archetype">${d.archetype}</div>` : ''}
-      ${d.colors ? `<div class="mana-row">${manaSymbols(d.colors)}</div>` : ''}
-      ${d.notes ? `<div class="deck-notes">${d.notes}</div>` : ''}
-      <div class="deck-stats">
-        <div class="deck-stat"><label>Cards</label><span>${d.cards || '—'}</span></div>
-        <div class="deck-stat"><label>Status</label><span style="color:${statusColor(d.status)}">${d.status}</span></div>
-        <div class="deck-stat"><label>Win Rate</label><span>${d.winrate || '—'}</span></div>
-        <div class="deck-stat"><label>Avg CMC</label><span>${d.cmc || '—'}</span></div>
-      </div>
-      <div class="deck-actions">
-        <button class="btn" onclick="editDeck(${i})" style="font-size:0.5rem;">✎ Edit</button>
-        <button class="btn btn-danger" onclick="deleteDeck(${i})" style="font-size:0.5rem;">✕</button>
-        ${d.link ? `<a href="${d.link}" target="_blank" class="btn" style="font-size:0.5rem;">↗ View List</a>` : ''}
+function starsHTML(n){ return Array(5).fill(0).map((_,i)=>`<span class="${i<n?'deck-star-filled':'deck-star-empty'}">★</span>`).join(''); }
+
+function statusColor(s){ return {'Tuned':'var(--saffron)','Testing':'var(--sky)','Retired':'var(--text-dim)','Brewing':'var(--brick-light)'}[s]||'var(--text-muted)'; }
+
+function render(){
+  const decks=getD();
+  const cards=decks.map((d,i)=>{
+    const imgHTML=d.img
+      ? `<img src="${d.img}" class="deck-commander-img" alt="Commander" onclick="requireAuth(()=>editDeck(${i}))">`
+      : `<div class="deck-img-placeholder" onclick="requireAuth(()=>editDeck(${i}))"><span>⬢</span><span>Add Image</span></div>`;
+    return `<div class="deck-card reveal">
+      <div class="deck-color-bar ${barClass(d.colors)}"></div>
+      ${imgHTML}
+      <div class="deck-body">
+        <div class="deck-format">${d.format}</div>
+        <div class="deck-name">${d.name}</div>
+        ${d.archetype?`<div class="deck-archetype">${d.archetype}</div>`:''}
+        ${d.colors?`<div class="mana-row">${manaSymbols(d.colors)}</div>`:''}
+        ${d.notes?`<div class="deck-notes">${d.notes}</div>`:''}
+        <div class="deck-stats">
+          ${d.bracket?`<div class="deck-stat"><label>Bracket</label><span>${d.bracket}</span></div>`:''}
+          <div class="deck-stat"><label>Status</label><span style="color:${statusColor(d.status)}">${d.status}</span></div>
+          ${d.fav?`<div class="deck-stat full"><label>Favorite Card</label><span style="color:var(--sky)">${d.fav}</span></div>`:''}
+          ${d.rating?`<div class="deck-stat full"><label>Rating</label><div class="deck-rating">${starsHTML(parseInt(d.rating))}</div></div>`:''}
+        </div>
+        <div class="deck-actions">
+          <button class="btn" onclick="requireAuth(()=>editDeck(${i}))" style="font-size:0.5rem">✎ Edit</button>
+          <button class="btn btn-danger" onclick="requireAuth(()=>deleteDeck(${i}))" style="font-size:0.5rem">✕</button>
+          ${d.link?`<a href="${d.link}" target="_blank" class="btn" style="font-size:0.5rem">↗ List</a>`:''}
+        </div>
       </div>
     </div>`;
   }).join('');
-
-  list.innerHTML = cards + `
-    <div class="deck-add-card" onclick="openModal('deck-modal')">
-      <span style="font-size:1.6rem;font-weight:100">+</span>
-      <span>Add Deck</span>
-    </div>`;
-
-  setTimeout(revealAll, 50);
+  document.getElementById('deck-list').innerHTML=cards+`<button class="deck-add-card" onclick="requireAuth(()=>openModal('deck-modal'))"><span style="font-size:1.6rem;font-weight:100">+</span><span>Add Deck</span></button>`;
+  setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible')),50);
 }
 
-function saveDeck() {
-  const idx = parseInt(document.getElementById('deck-edit-idx').value);
-  const d = {
-    name:      document.getElementById('d-name').value.trim(),
-    format:    document.getElementById('d-format').value,
-    archetype: document.getElementById('d-archetype').value.trim(),
-    colors:    document.getElementById('d-colors').value.trim(),
-    winrate:   document.getElementById('d-winrate').value.trim(),
-    cmc:       document.getElementById('d-cmc').value.trim(),
-    cards:     document.getElementById('d-cards').value,
-    status:    document.getElementById('d-status').value,
-    notes:     document.getElementById('d-notes').value.trim(),
-    link:      document.getElementById('d-link').value.trim(),
-  };
-  if (!d.name) return alert('Please add a deck name.');
-  const decks = getDecks();
-  if (idx >= 0) decks[idx] = d; else decks.push(d);
-  setDecks(decks);
-  closeModal('deck-modal');
-  render();
+function saveDeck(){
+  const idx=parseInt(document.getElementById('d-edit-idx').value);
+  const d={ name:document.getElementById('d-name').value.trim(), format:document.getElementById('d-format').value, archetype:document.getElementById('d-archetype').value.trim(), colors:document.getElementById('d-colors').value.trim(), bracket:document.getElementById('d-bracket').value, fav:document.getElementById('d-fav').value.trim(), status:document.getElementById('d-status').value, rating:document.getElementById('d-rating').value, notes:document.getElementById('d-notes').value.trim(), link:document.getElementById('d-link').value.trim(), img:document.getElementById('d-img').value };
+  if(!d.name) return alert('Please add a deck name.');
+  const arr=getD(); if(idx>=0) arr[idx]=d; else arr.push(d); setD(arr);
+  closeModal('deck-modal'); render();
 }
 
-function deleteDeck(i) {
-  if (!confirm('Delete this deck?')) return;
-  const decks = getDecks(); decks.splice(i, 1); setDecks(decks); render();
-}
+function deleteDeck(i){ if(!confirm('Delete this deck?')) return; const a=getD(); a.splice(i,1); setD(a); render(); }
 
-function editDeck(i) {
-  const d = getDecks()[i];
-  document.getElementById('deck-edit-idx').value = i;
-  document.getElementById('deck-modal-label').textContent = 'Edit Deck';
-  document.getElementById('d-name').value = d.name;
-  document.getElementById('d-format').value = d.format;
-  document.getElementById('d-archetype').value = d.archetype || '';
-  document.getElementById('d-colors').value = d.colors || '';
-  document.getElementById('d-winrate').value = d.winrate || '';
-  document.getElementById('d-cmc').value = d.cmc || '';
-  document.getElementById('d-cards').value = d.cards || 100;
-  document.getElementById('d-status').value = d.status;
-  document.getElementById('d-notes').value = d.notes || '';
-  document.getElementById('d-link').value = d.link || '';
+function editDeck(i){
+  const d=getD()[i];
+  document.getElementById('d-edit-idx').value=i; document.getElementById('dmod-label').textContent='Edit Deck';
+  document.getElementById('d-name').value=d.name; document.getElementById('d-format').value=d.format; document.getElementById('d-archetype').value=d.archetype||''; document.getElementById('d-colors').value=d.colors||''; document.getElementById('d-bracket').value=d.bracket||''; document.getElementById('d-fav').value=d.fav||''; document.getElementById('d-status').value=d.status; document.getElementById('d-notes').value=d.notes||''; document.getElementById('d-link').value=d.link||'';
+  const r=parseInt(d.rating)||0; document.getElementById('d-rating').value=r;
+  document.querySelectorAll('#d-star-input span').forEach((s,i)=>s.classList.toggle('on',i<r));
+  if(d.img){ document.getElementById('d-img').value=d.img; document.getElementById('cmd-preview').src=d.img; document.getElementById('cmd-preview-wrap').style.display='block'; }
+  else { document.getElementById('d-img').value=''; document.getElementById('cmd-preview-wrap').style.display='none'; }
   openModal('deck-modal');
 }
 
-function openModal(id) {
-  if (id === 'deck-modal' && document.getElementById('deck-edit-idx').value === '-1') {
-    document.getElementById('deck-modal-label').textContent = 'Add MTG Deck';
-    ['d-name','d-archetype','d-colors','d-winrate','d-cmc','d-notes','d-link'].forEach(f => document.getElementById(f).value = '');
-    document.getElementById('d-cards').value = 100;
-    document.getElementById('d-format').value = 'Commander / EDH';
-    document.getElementById('d-status').value = 'Brewing';
+function openModal(id){
+  if(id==='deck-modal'&&document.getElementById('d-edit-idx').value==='-1'){
+    document.getElementById('dmod-label').textContent='Add MTG Deck';
+    ['d-name','d-archetype','d-colors','d-bracket','d-fav','d-notes','d-link','d-img'].forEach(f=>document.getElementById(f).value='');
+    document.getElementById('d-format').value='Commander / EDH'; document.getElementById('d-status').value='Brewing';
+    document.getElementById('d-rating').value=0; document.querySelectorAll('#d-star-input span').forEach(s=>s.classList.remove('on'));
+    document.getElementById('cmd-preview-wrap').style.display='none';
   }
-  document.getElementById(id).classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden';
 }
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-  document.getElementById('deck-edit-idx').value = '-1';
-  document.body.style.overflow = '';
-}
-
-function revealAll() {
-  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-}
-
-document.querySelectorAll('.modal-bg').forEach(bg => {
-  bg.addEventListener('click', e => { if (e.target === bg) closeModal(bg.id); });
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') document.querySelectorAll('.modal-bg.open').forEach(m => closeModal(m.id));
-});
-
+function closeModal(id){ document.getElementById(id).classList.remove('open'); document.getElementById('d-edit-idx').value='-1'; document.body.style.overflow=''; }
+document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',e=>{if(e.target===bg)closeModal(bg.id);}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-bg.open').forEach(m=>closeModal(m.id));});
 render();
 </script>
 </body>

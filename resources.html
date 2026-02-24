@@ -1,264 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Resources — The Waanderer's Log</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resources — Just Saffron</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lilex:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
-.resource-filters {
-  display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2.5rem;
-}
-
-.filter-btn {
-  font-family: var(--font); font-size: 0.55rem; letter-spacing: 0.2em;
-  text-transform: uppercase; padding: 0.4rem 1rem;
-  border: 1px solid var(--border); background: none;
-  color: var(--text-dim); cursor: pointer; transition: all 0.2s;
-}
-.filter-btn.active, .filter-btn:hover {
-  border-color: rgba(232,168,74,0.35); color: var(--sand-gold);
-}
-
-.resource-list { display: flex; flex-direction: column; gap: 1px; }
-
-.resource-item {
-  background: var(--sand-dark); padding: 1.8rem 2rem;
-  display: grid; grid-template-columns: 90px 1fr 40px;
-  align-items: center; gap: 2rem;
-  transition: background 0.3s; position: relative;
-}
-
-.resource-item:hover { background: rgba(45,26,5,0.9); }
-
-.resource-category {
-  font-size: 0.52rem; letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--sand-warm); text-align: right;
-  border-right: 1px solid var(--border); padding-right: 2rem;
-  line-height: 1.5;
-}
-
-.resource-mine { font-size: 0.45rem; color: var(--terra-light); display: block; margin-top: 0.2rem; }
-
-.resource-title { font-size: 0.88rem; font-weight: 400; color: var(--white); margin-bottom: 0.3rem; }
-.resource-desc  { font-size: 0.63rem; font-weight: 300; color: var(--text-muted); line-height: 1.65; }
-.resource-tags  { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
-
-.resource-arrow {
-  font-size: 0.9rem; color: var(--text-dim); transition: color 0.2s, transform 0.2s;
-  text-decoration: none; text-align: center;
-}
-.resource-item:hover .resource-arrow { color: var(--sand-gold); transform: translateX(3px); }
-
-.resource-actions {
-  position: absolute; right: 3.5rem; top: 50%; transform: translateY(-50%);
-  display: none; gap: 0.5rem; align-items: center;
-}
-
-.resource-item:hover .resource-actions { display: flex; }
-
-.add-resource-row {
-  display: flex; align-items: center; justify-content: center; gap: 1rem;
-  padding: 1.8rem 2rem; border: 1px dashed rgba(232,168,74,0.15);
-  color: var(--text-dim); font-size: 0.6rem; letter-spacing: 0.3em;
-  text-transform: uppercase; cursor: pointer; transition: all 0.3s;
-  background: none; font-family: var(--font);
-}
-
-.add-resource-row:hover { border-color: rgba(232,168,74,0.4); color: var(--sand-gold); }
-
-.category-colors {
-  'Article': 'var(--sand-warm)',
-  'Framework': 'var(--sky-light)',
-  'External Link': 'var(--terra-light)',
-  'Reading': 'var(--sand-gold)',
-  'Tool': 'var(--text-warm)',
-}
+.res-list { display:flex; flex-direction:column; gap:1px; }
+.res-item { background:var(--navy-mid); padding:1.6rem 2rem; display:grid; grid-template-columns:88px 1fr 40px; align-items:center; gap:2rem; transition:background 0.3s; position:relative; }
+.res-item:hover { background:rgba(48,55,99,0.65); }
+.res-cat { font-size:0.5rem; letter-spacing:0.25em; text-transform:uppercase; text-align:right; border-right:1px solid var(--border); padding-right:2rem; line-height:1.6; }
+.res-mine { font-size:0.44rem; color:var(--brick-light); display:block; margin-top:0.2rem; }
+.res-title { font-size:0.85rem; font-weight:400; color:var(--white); margin-bottom:0.3rem; }
+.res-desc  { font-size:0.62rem; font-weight:300; color:var(--text-muted); line-height:1.65; }
+.res-tags  { display:flex; flex-wrap:wrap; gap:0.3rem; margin-top:0.5rem; }
+.res-arrow { font-size:0.9rem; color:var(--text-dim); transition:color 0.2s,transform 0.2s; text-decoration:none; text-align:center; }
+.res-item:hover .res-arrow { color:var(--saffron); transform:translateX(3px); }
+.res-actions { position:absolute; right:3.5rem; top:50%; transform:translateY(-50%); display:none; gap:0.5rem; align-items:center; }
+.res-item:hover .res-actions { display:flex; }
+.add-res { display:flex; align-items:center; justify-content:center; gap:1rem; padding:1.6rem 2rem; border:1px dashed rgba(125,183,202,0.15); color:var(--text-dim); font-size:0.58rem; letter-spacing:0.3em; text-transform:uppercase; cursor:pointer; transition:all 0.3s; background:none; font-family:var(--font); width:100%; }
+.add-res:hover { border-color:rgba(232,170,68,0.4); color:var(--saffron); background:var(--saffron-dim); }
 </style>
 </head>
 <body>
-
 <nav>
-  <a class="nav-logo" href="index.html">The Waanderer's Log</a>
+  <a class="nav-logo" href="index.html">Just Saffron</a>
   <ul class="nav-links">
-    <li><a href="projects.html">Projects</a></li>
-    <li><a href="mtg.html">MTG</a></li>
-    <li><a href="moodboards.html">Moodboards</a></li>
-    <li><a href="photography.html">Photography</a></li>
-    <li><a href="reviews.html">Reviews</a></li>
-    <li><a href="resources.html" class="active">Resources</a></li>
+    <li><a href="projects.html">Projects</a></li><li><a href="mtg.html">Decks</a></li>
+    <li><a href="moodboards.html">Moodboards</a></li><li><a href="photography.html">Photography</a></li>
+    <li><a href="reviews.html">Reviews</a></li><li><a href="resources.html" class="active">Resources</a></li>
     <li><a href="editor.html" class="edit-link">✦ Edit</a></li>
   </ul>
 </nav>
-
 <div class="page-header">
   <div class="page-header-left">
     <p class="page-eyebrow">06 · Resources &amp; Writing</p>
     <h1 class="page-title">The <em>Archive</em></h1>
-    <p class="page-subtitle">Articles I've written, frameworks I use, curated links worth keeping, and tools I reach for. Filtered signal.</p>
+    <p class="page-subtitle">Articles I've written, frameworks I return to, curated links, and tools I reach for. Filtered signal — no noise.</p>
   </div>
-  <button class="btn btn-primary" onclick="openModal('resource-modal')">+ Add Resource</button>
+  <button class="btn btn-primary" data-auth onclick="requireAuth(()=>openModal('res-modal'))">+ Add Resource</button>
 </div>
-
 <div class="page-content">
-  <div class="resource-filters" id="res-filters">
-    <button class="filter-btn active" onclick="filterRes('all', this)">All</button>
-    <button class="filter-btn" onclick="filterRes('Article', this)">My Articles</button>
-    <button class="filter-btn" onclick="filterRes('Framework', this)">Frameworks</button>
-    <button class="filter-btn" onclick="filterRes('External Link', this)">Links</button>
-    <button class="filter-btn" onclick="filterRes('Tool', this)">Tools</button>
-    <button class="filter-btn" onclick="filterRes('Reading', this)">Reading</button>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterRes('all',this)">All</button>
+    <button class="filter-btn" onclick="filterRes('Article',this)">My Articles</button>
+    <button class="filter-btn" onclick="filterRes('Framework',this)">Frameworks</button>
+    <button class="filter-btn" onclick="filterRes('External Link',this)">Links</button>
+    <button class="filter-btn" onclick="filterRes('Tool',this)">Tools</button>
+    <button class="filter-btn" onclick="filterRes('Reading',this)">Reading</button>
   </div>
-  <div class="resource-list" id="resource-list"></div>
-  <button class="add-resource-row" onclick="openModal('resource-modal')">+ Add Resource or Article</button>
+  <div class="res-list" id="res-list"></div>
+  <button class="add-res" data-auth onclick="requireAuth(()=>openModal('res-modal'))">+ Add Resource or Article</button>
 </div>
+<footer class="site-footer"><div class="site-footer-sig">Just Saffron · <a href="index.html">← Home</a></div></footer>
 
-<footer class="site-footer">
-  <div class="site-footer-sig">The Waanderer's Log · <a href="index.html">← Home</a></div>
-</footer>
-
-<!-- RESOURCE MODAL -->
-<div class="modal-bg" id="resource-modal">
+<div class="modal-bg" id="res-modal">
   <div class="modal">
-    <div class="modal-title" id="res-modal-label">Add Resource</div>
+    <div class="modal-title" id="rmod-label">Add Resource</div>
     <input type="hidden" id="res-edit-idx" value="-1">
     <div class="form-grid">
-      <div class="form-row"><label>Type</label>
-        <select id="res-type">
-          <option>Article</option><option>Framework</option>
-          <option>External Link</option><option>Reading</option><option>Tool</option>
-        </select>
-      </div>
+      <div class="form-row"><label>Type</label><select id="res-type"><option>Article</option><option>Framework</option><option>External Link</option><option>Reading</option><option>Tool</option></select></div>
       <div class="form-row"><label>Title *</label><input type="text" id="res-title" placeholder="e.g. How to Run a Pre-Mortem"></div>
     </div>
     <div class="form-row"><label>Description</label><textarea id="res-desc" placeholder="What is this and why does it matter?"></textarea></div>
     <div class="form-row"><label>URL (optional)</label><input type="url" id="res-url" placeholder="https://..."></div>
     <div class="form-row"><label>Tags (comma-separated)</label><input type="text" id="res-tags" placeholder="e.g. strategy, risk, planning"></div>
     <div class="modal-actions">
-      <button class="btn" onclick="closeModal('resource-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveResource()">Save</button>
+      <button class="btn" onclick="closeModal('res-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveRes()">Save</button>
     </div>
   </div>
 </div>
 
+<script src="auth.js"></script>
 <script>
-const KEY = 'waanderer_resources';
-let activeFilter = 'all';
+const KEY='waanderer_resources'; let activeFilter='all';
+function getRes(){ return JSON.parse(localStorage.getItem(KEY)||'[]'); }
+function setRes(a){ localStorage.setItem(KEY,JSON.stringify(a)); }
+const catColors={'Article':'var(--saffron)','Framework':'var(--sky)','External Link':'var(--brick-light)','Reading':'var(--saffron)','Tool':'var(--text-warm)'};
 
-function getResources() { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
-function setResources(a) { localStorage.setItem(KEY, JSON.stringify(a)); }
+function saveRes(){ const idx=parseInt(document.getElementById('res-edit-idx').value); const r={ type:document.getElementById('res-type').value, title:document.getElementById('res-title').value.trim(), desc:document.getElementById('res-desc').value.trim(), url:document.getElementById('res-url').value.trim(), tags:document.getElementById('res-tags').value.split(',').map(t=>t.trim()).filter(Boolean), date:new Date().toLocaleDateString('en-GB',{month:'short',year:'numeric'}) }; if(!r.title) return alert('Please add a title.'); const a=getRes(); if(idx>=0) a[idx]=r; else a.push(r); setRes(a); closeModal('res-modal'); render(); }
+function deleteRes(idx){ if(!confirm('Delete?')) return; const a=getRes(); a.splice(idx,1); setRes(a); render(); }
+function editRes(idx){ const r=getRes()[idx]; document.getElementById('res-edit-idx').value=idx; document.getElementById('rmod-label').textContent='Edit Resource'; document.getElementById('res-type').value=r.type; document.getElementById('res-title').value=r.title; document.getElementById('res-desc').value=r.desc||''; document.getElementById('res-url').value=r.url||''; document.getElementById('res-tags').value=(r.tags||[]).join(', '); requireAuth(()=>openModal('res-modal')); }
+function filterRes(f,btn){ activeFilter=f; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); render(); }
 
-const catColor = {
-  'Article': 'var(--sand-warm)',
-  'Framework': 'var(--sky-light)',
-  'External Link': 'var(--terra-light)',
-  'Reading': 'var(--sand-gold)',
-  'Tool': 'var(--text-warm)',
-};
+function render(){ const all=getRes(); const filtered=activeFilter==='all'?all:all.filter(r=>r.type===activeFilter); const list=document.getElementById('res-list'); if(!filtered.length){ list.innerHTML=`<div class="empty-state"><div class="empty-icon">◉</div><p>Nothing here yet</p></div>`; return; } list.innerHTML=filtered.map(r=>{ const ri=all.indexOf(r); const color=catColors[r.type]||'var(--text-muted)'; const arrow=r.url?`<a href="${r.url}" target="_blank" class="res-arrow">↗</a>`:`<span class="res-arrow" style="opacity:0.2">→</span>`; const tags=(r.tags||[]).map(t=>`<span class="tag">${t}</span>`).join(''); return `<div class="res-item reveal"><div class="res-cat" style="color:${color}">${r.type}${r.type==='Article'?'<span class="res-mine">✦ by me</span>':''}</div><div><div class="res-title">${r.title}</div>${r.desc?`<div class="res-desc">${r.desc}</div>`:''} ${tags?`<div class="res-tags">${tags}</div>`:''}</div><div class="res-actions"><button class="btn" onclick="editRes(${ri})" style="font-size:0.5rem;padding:0.3rem 0.6rem">✎</button><button class="btn btn-danger" onclick="requireAuth(()=>deleteRes(${ri}))" style="font-size:0.5rem;padding:0.3rem 0.6rem">✕</button></div>${arrow}</div>`; }).join(''); setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible')),50); }
 
-function saveResource() {
-  const idx = parseInt(document.getElementById('res-edit-idx').value);
-  const r = {
-    type:  document.getElementById('res-type').value,
-    title: document.getElementById('res-title').value.trim(),
-    desc:  document.getElementById('res-desc').value.trim(),
-    url:   document.getElementById('res-url').value.trim(),
-    tags:  document.getElementById('res-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
-    date:  new Date().toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }),
-  };
-  if (!r.title) return alert('Please add a title.');
-  const res = getResources();
-  if (idx >= 0) res[idx] = r; else res.push(r);
-  setResources(res);
-  closeModal('resource-modal');
-  render();
-}
-
-function deleteResource(idx) {
-  if (!confirm('Delete this resource?')) return;
-  const res = getResources(); res.splice(idx, 1); setResources(res); render();
-}
-
-function editResource(idx) {
-  const r = getResources()[idx];
-  document.getElementById('res-edit-idx').value = idx;
-  document.getElementById('res-modal-label').textContent = 'Edit Resource';
-  document.getElementById('res-type').value = r.type;
-  document.getElementById('res-title').value = r.title;
-  document.getElementById('res-desc').value = r.desc || '';
-  document.getElementById('res-url').value = r.url || '';
-  document.getElementById('res-tags').value = (r.tags||[]).join(', ');
-  openModal('resource-modal');
-}
-
-function filterRes(f, btn) {
-  activeFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  render();
-}
-
-function render() {
-  const all = getResources();
-  const filtered = activeFilter === 'all' ? all : all.filter(r => r.type === activeFilter);
-  const list = document.getElementById('resource-list');
-
-  if (filtered.length === 0) {
-    list.innerHTML = `<div class="empty-state"><div class="empty-icon">◉</div><p>Nothing here yet</p></div>`;
-    return;
-  }
-
-  list.innerHTML = filtered.map(r => {
-    const idx = all.indexOf(r);
-    const arrow = r.url ? `<a href="${r.url}" target="_blank" class="resource-arrow">↗</a>` : `<span class="resource-arrow" style="opacity:0.2">→</span>`;
-    const tags = (r.tags||[]).map(t => `<span class="tag">${t}</span>`).join('');
-    const isMine = r.type === 'Article';
-    const color = catColor[r.type] || 'var(--text-muted)';
-    return `
-    <div class="resource-item reveal">
-      <div class="resource-category" style="color:${color}">
-        ${r.type}
-        ${isMine ? '<span class="resource-mine">✦ by me</span>' : ''}
-      </div>
-      <div>
-        <div class="resource-title">${r.title}</div>
-        ${r.desc ? `<div class="resource-desc">${r.desc}</div>` : ''}
-        ${tags ? `<div class="resource-tags">${tags}</div>` : ''}
-        ${r.date ? `<div style="font-size:0.48rem;color:var(--text-dim);margin-top:0.5rem;letter-spacing:0.15em">Added ${r.date}</div>` : ''}
-      </div>
-      <div class="resource-actions">
-        <button class="btn" onclick="editResource(${idx})" style="font-size:0.5rem;padding:0.3rem 0.6rem">✎</button>
-        <button class="btn btn-danger" onclick="deleteResource(${idx})" style="font-size:0.5rem;padding:0.3rem 0.6rem">✕</button>
-      </div>
-      ${arrow}
-    </div>`;
-  }).join('');
-
-  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible')), 50);
-}
-
-function openModal(id) {
-  if (id === 'resource-modal' && document.getElementById('res-edit-idx').value === '-1') {
-    document.getElementById('res-modal-label').textContent = 'Add Resource';
-    ['res-title','res-desc','res-url','res-tags'].forEach(f => document.getElementById(f).value = '');
-    document.getElementById('res-type').value = 'Article';
-  }
-  document.getElementById(id).classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-  document.getElementById('res-edit-idx').value = '-1';
-  document.body.style.overflow = '';
-}
-document.querySelectorAll('.modal-bg').forEach(bg => {
-  bg.addEventListener('click', e => { if (e.target === bg) closeModal(bg.id); });
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') document.querySelectorAll('.modal-bg.open').forEach(m => closeModal(m.id));
-});
+function openModal(id){ if(id==='res-modal'&&document.getElementById('res-edit-idx').value==='-1'){ document.getElementById('rmod-label').textContent='Add Resource'; ['res-title','res-desc','res-url','res-tags'].forEach(f=>document.getElementById(f).value=''); document.getElementById('res-type').value='Article'; } document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); document.getElementById('res-edit-idx').value='-1'; document.body.style.overflow=''; }
+document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',e=>{if(e.target===bg)closeModal(bg.id);}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-bg.open').forEach(m=>closeModal(m.id));});
 render();
 </script>
 </body>
