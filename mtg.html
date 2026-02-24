@@ -7,58 +7,149 @@
 <link href="https://fonts.googleapis.com/css2?family=Lilex:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
-.deck-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1px; background:var(--border-sky); }
+/* ── GRID ── */
+.deck-grid { display:flex; flex-direction:column; gap:1px; }
 
-.deck-card { background:var(--navy-mid); display:flex; flex-direction:column; position:relative; overflow:hidden; transition:background 0.3s; }
-.deck-card:hover { background:rgba(48,55,99,0.7); }
+.deck-card {
+  background:var(--navy-mid); display:grid;
+  grid-template-columns:320px 1fr;
+  border:1px solid var(--border); position:relative; overflow:hidden;
+  transition:border-color 0.3s; cursor:grab;
+}
+.deck-card:active { cursor:grabbing; }
+.deck-card.dragging { opacity:0.35; border:2px dashed var(--saffron); }
+.deck-card.drag-over { border-top:3px solid var(--saffron); }
+.deck-card:hover { border-color:rgba(232,170,68,0.28); }
 
-.deck-color-bar { height:3px; }
+/* color bar top */
+.deck-color-bar { position:absolute; top:0; left:0; right:0; height:3px; }
 
-.deck-commander-img { width:100%; aspect-ratio:1/1; object-fit:cover; display:block; filter:saturate(0.85); transition:filter 0.4s,transform 0.5s; }
+/* ── LEFT PANEL ── */
+.deck-left {
+  padding:0; display:flex; flex-direction:column;
+  border-right:1px solid var(--border); background:rgba(20,24,50,0.4);
+}
+.deck-commander-img {
+  width:100%; aspect-ratio:1/1; object-fit:cover; display:block;
+  filter:saturate(0.88); transition:filter 0.4s,transform 0.5s;
+  cursor:pointer;
+}
 .deck-card:hover .deck-commander-img { filter:saturate(1.05); transform:scale(1.03); }
-.deck-img-placeholder { width:100%; aspect-ratio:1/1; background:linear-gradient(135deg,var(--navy-deep),var(--navy-light)); display:flex; align-items:center; justify-content:center; color:var(--text-dim); font-size:2rem; flex-direction:column; gap:0.5rem; cursor:pointer; transition:background 0.3s; }
+.deck-img-placeholder {
+  width:100%; aspect-ratio:1/1; background:linear-gradient(135deg,var(--navy-deep),var(--navy-light));
+  display:flex; align-items:center; justify-content:center; color:var(--text-dim);
+  font-size:2.2rem; flex-direction:column; gap:0.5rem; cursor:pointer; transition:background 0.3s;
+}
 .deck-img-placeholder:hover { background:linear-gradient(135deg,var(--navy-mid),var(--blue)); color:var(--sky); }
-.deck-img-placeholder span { font-size:0.55rem; letter-spacing:0.2em; text-transform:uppercase; }
+.deck-img-placeholder span { font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; }
 
-.deck-body { padding:1.5rem; display:flex; flex-direction:column; gap:0.75rem; flex:1; }
-.deck-format  { font-size:0.5rem; letter-spacing:0.32em; text-transform:uppercase; color:var(--sky); }
-.deck-name    { font-size:1.05rem; font-weight:400; color:var(--white); line-height:1.2; }
-.deck-archetype { font-size:0.62rem; color:var(--text-dim); font-style:italic; }
+/* ── RIGHT PANEL ── */
+.deck-right { padding:1.8rem; display:flex; flex-direction:column; gap:0.9rem; }
+.deck-format   { font-size:0.64rem; letter-spacing:0.32em; text-transform:uppercase; color:var(--sky); }
+.deck-name     { font-size:1.2rem; font-weight:400; color:var(--white); line-height:1.2; }
+.deck-archetype{ font-size:0.78rem; color:var(--text-dim); font-style:italic; }
+.deck-notes    { font-size:0.84rem; font-weight:300; line-height:1.75; color:var(--text-muted); flex:1; }
+.deck-actions  { display:flex; gap:0.6rem; padding-top:1rem; border-top:1px solid var(--border); flex-wrap:wrap; align-items:center; }
+.drag-handle   { font-size:1.1rem; color:var(--text-dim); cursor:grab; padding:0 0.4rem; opacity:0.5; transition:opacity 0.2s; user-select:none; }
+.deck-card:hover .drag-handle { opacity:1; }
 
-.mana-row { display:flex; gap:0.4rem; flex-wrap:wrap; }
-.mana { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.57rem; font-weight:700; border:1px solid rgba(255,255,255,0.15); }
-.mana-W{background:#f9f6ee;color:#3a3020} .mana-U{background:#0e68ab;color:#fff} .mana-B{background:#150b00;color:#c4b5a0;border-color:#c4b5a0} .mana-R{background:#d3202a;color:#fff} .mana-G{background:#00733e;color:#fff} .mana-C{background:#ccc2c0;color:#333}
+/* ── COLOR IDENTITY PIPS ── */
+.color-identity-row { display:flex; gap:5px; align-items:center; flex-wrap:wrap; }
+.mana-pip {
+  width:22px; height:22px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.62rem; font-weight:700; font-family:'Courier New',monospace;
+  border:1.5px solid rgba(255,255,255,0.2);
+  box-shadow:0 1px 3px rgba(0,0,0,0.4);
+  flex-shrink:0;
+}
+.pip-W { background:radial-gradient(circle,#f9f7ed,#d8d3b5); color:#3a3020; border-color:#c0bba0; }
+.pip-U { background:radial-gradient(circle,#3b88c4,#1558a0); color:#fff; border-color:#0e4a8a; }
+.pip-B { background:radial-gradient(circle,#2a2520,#0a0805); color:#bfb5a0; border-color:#5a5040; }
+.pip-R { background:radial-gradient(circle,#e84040,#a01818); color:#fff; border-color:#881010; }
+.pip-G { background:radial-gradient(circle,#28a060,#146030); color:#fff; border-color:#0a4820; }
+.pip-C { background:radial-gradient(circle,#c8c4c0,#908c88); color:#2a2820; border-color:#707070; }
 
-.deck-notes { font-size:0.64rem; font-weight:300; line-height:1.75; color:var(--text-muted); flex:1; }
-
-.deck-stats { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; border-top:1px solid var(--border); padding-top:1rem; margin-top:auto; }
-.deck-stat label { display:block; font-size:0.47rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--text-dim); margin-bottom:0.2rem; }
-.deck-stat span  { font-size:0.68rem; color:var(--text-warm); }
+/* ── STAT GRID ── */
+.deck-stats { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; border-top:1px solid var(--border); padding-top:1rem; }
+.deck-stat label { display:block; font-size:0.6rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--text-dim); margin-bottom:0.25rem; }
+.deck-stat span  { font-size:0.84rem; color:var(--text-warm); }
 .deck-stat.full  { grid-column:1/-1; }
 
-.deck-actions { display:flex; gap:0.6rem; padding-top:1rem; border-top:1px solid var(--border); }
+/* ── BRACKET BADGE ── */
+.bracket-badge {
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:0.78rem; font-weight:500; color:var(--saffron);
+  border:1.5px solid rgba(232,170,68,0.4);
+  padding:0.15rem 0.6rem; letter-spacing:0.1em;
+  background:rgba(232,170,68,0.08);
+}
 
-.deck-add-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem; min-height:250px; border:1px dashed rgba(125,183,202,0.15); background:transparent; color:var(--text-dim); font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; transition:all 0.3s; font-family:var(--font); }
+/* ── STAR RATING ── */
+.star-row { display:flex; gap:2px; }
+.sr-filled { color:var(--saffron); font-size:1.05rem; line-height:1; }
+.sr-empty  { color:rgba(232,170,68,0.15); font-size:1.05rem; line-height:1; }
+
+/* ── SCRYFALL HOVER POPUP ── */
+.card-hover-link { color:var(--sky); cursor:pointer; text-decoration:underline dotted; text-underline-offset:3px; position:relative; }
+.scryfall-popup {
+  position:fixed; z-index:2000; pointer-events:none;
+  width:200px; border-radius:12px; overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,0.7);
+  opacity:0; transform:scale(0.92);
+  transition:opacity 0.18s,transform 0.18s;
+  border:1px solid rgba(125,183,202,0.2);
+}
+.scryfall-popup.visible { opacity:1; transform:scale(1); }
+.scryfall-popup img { width:100%; display:block; }
+.scryfall-popup .sp-loading {
+  width:200px; height:280px; background:var(--navy-mid);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--text-dim); font-size:0.64rem; letter-spacing:0.2em;
+}
+
+/* ── ADD CARD BUTTON ── */
+.deck-add-card {
+  display:flex; align-items:center; justify-content:center; gap:1rem;
+  min-height:100px; border:1px dashed rgba(125,183,202,0.15);
+  color:var(--text-dim); font-size:0.78rem; letter-spacing:0.2em;
+  text-transform:uppercase; cursor:pointer; transition:all 0.3s;
+  background:transparent; font-family:var(--font); width:100%;
+}
 .deck-add-card:hover { border-color:rgba(232,170,68,0.4); color:var(--saffron); background:var(--saffron-dim); }
 
-/* star rating for deck */
-.deck-rating { display:flex; gap:2px; }
-.deck-star-filled { color:var(--saffron); font-size:0.9rem; }
-.deck-star-empty  { color:rgba(232,170,68,0.15); font-size:0.9rem; }
+/* color bar classes */
+.bar-W{background:#f9f6ee} .bar-U{background:#0e68ab} .bar-B{background:#150b00}
+.bar-R{background:#d3202a} .bar-G{background:#00733e}
+.bar-WU{background:linear-gradient(90deg,#f9f6ee,#0e68ab)}
+.bar-UB{background:linear-gradient(90deg,#0e68ab,#150b00)}
+.bar-BR{background:linear-gradient(90deg,#150b00,#d3202a)}
+.bar-RG{background:linear-gradient(90deg,#d3202a,#00733e)}
+.bar-GW{background:linear-gradient(90deg,#00733e,#f9f6ee)}
+.bar-WUB{background:linear-gradient(90deg,#f9f6ee,#0e68ab,#150b00)}
+.bar-UBR{background:linear-gradient(90deg,#0e68ab,#150b00,#d3202a)}
+.bar-BRG{background:linear-gradient(90deg,#150b00,#d3202a,#00733e)}
+.bar-RGW{background:linear-gradient(90deg,#d3202a,#00733e,#f9f6ee)}
+.bar-GWU{background:linear-gradient(90deg,#00733e,#f9f6ee,#0e68ab)}
+.bar-WUBR{background:linear-gradient(90deg,#f9f6ee,#0e68ab,#150b00,#d3202a)}
+.bar-UBRG{background:linear-gradient(90deg,#0e68ab,#150b00,#d3202a,#00733e)}
+.bar-5C{background:linear-gradient(90deg,#f9f6ee,#0e68ab,#150b00,#d3202a,#00733e)}
+.bar-RW{background:linear-gradient(90deg,#d3202a,#f9f6ee)}
+.bar-def{background:linear-gradient(90deg,var(--navy-light),var(--blue))}
 
-/* color bar helpers */
-.bar-W{background:#f9f6ee} .bar-U{background:#0e68ab} .bar-B{background:#150b00} .bar-R{background:#d3202a} .bar-G{background:#00733e}
-.bar-WU{background:linear-gradient(90deg,#f9f6ee,#0e68ab)} .bar-UB{background:linear-gradient(90deg,#0e68ab,#150b00)} .bar-BR{background:linear-gradient(90deg,#150b00,#d3202a)} .bar-RG{background:linear-gradient(90deg,#d3202a,#00733e)} .bar-GW{background:linear-gradient(90deg,#00733e,#f9f6ee)}
-.bar-WUB{background:linear-gradient(90deg,#f9f6ee,#0e68ab,#150b00)} .bar-UBR{background:linear-gradient(90deg,#0e68ab,#150b00,#d3202a)} .bar-BRG{background:linear-gradient(90deg,#150b00,#d3202a,#00733e)} .bar-RGW{background:linear-gradient(90deg,#d3202a,#00733e,#f9f6ee)} .bar-GWU{background:linear-gradient(90deg,#00733e,#f9f6ee,#0e68ab)}
-.bar-RW{background:linear-gradient(90deg,#d3202a,#f9f6ee)} .bar-default{background:linear-gradient(90deg,var(--navy-light),var(--blue))}
-
-/* MODAL – commander image upload preview */
-.cmd-img-preview { width:100%; aspect-ratio:1/1; object-fit:cover; display:block; margin-bottom:0.8rem; max-height:200px; }
-.cmd-img-upload-btn { display:flex; align-items:center; justify-content:center; gap:0.5rem; width:100%; padding:1rem; border:1px dashed rgba(125,183,202,0.25); color:var(--text-muted); font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; background:none; font-family:var(--font); transition:all 0.3s; }
-.cmd-img-upload-btn:hover { border-color:rgba(232,170,68,0.4); color:var(--saffron); }
+/* Modal – commander upload */
+.cmd-upload-btn { display:flex; align-items:center; justify-content:center; gap:0.5rem; width:100%; padding:1rem; border:1px dashed rgba(125,183,202,0.25); color:var(--text-muted); font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; background:none; font-family:var(--font); transition:all 0.3s; }
+.cmd-upload-btn:hover { border-color:rgba(232,170,68,0.4); color:var(--saffron); }
 </style>
 </head>
 <body>
+
+<!-- Scryfall popup (singleton) -->
+<div class="scryfall-popup" id="scryfall-popup">
+  <div class="sp-loading" id="sp-loading">Loading...</div>
+  <img id="sp-img" src="" alt="" style="display:none">
+</div>
+
 <nav>
   <a class="nav-logo" href="index.html">Just Saffron</a>
   <ul class="nav-links">
@@ -71,32 +162,39 @@
     <li><a href="editor.html" class="edit-link">✦ Edit</a></li>
   </ul>
 </nav>
+
 <div class="page-header">
   <div class="page-header-left">
     <p class="page-eyebrow">02 · Magic the Gathering</p>
-    <h1 class="page-title">The <em>Decks</em></h1>
+    <h1 class="page-title">The Decks</h1>
     <p class="page-subtitle">Every deck built, tuned, and tested. Commanders, archetypes, bracket numbers, favorite cards, and honest ratings.</p>
   </div>
-  <button class="btn btn-primary" data-auth onclick="requireAuth(()=>openModal('deck-modal'))">+ Add Deck</button>
+  <button class="btn btn-primary" onclick="requireAuth(()=>openModal('deck-modal'))">+ Add Deck</button>
 </div>
+
 <div class="page-content">
   <div class="deck-grid" id="deck-list"></div>
+  <button class="deck-add-card" onclick="requireAuth(()=>openModal('deck-modal'))">
+    <span style="font-size:1.6rem;font-weight:100">+</span><span>Add Deck</span>
+  </button>
 </div>
+
 <footer class="site-footer">
   <div class="site-footer-sig">Just Saffron · <a href="index.html">← Home</a></div>
 </footer>
 
 <!-- DECK MODAL -->
 <div class="modal-bg" id="deck-modal">
-  <div class="modal">
+  <div class="modal" style="width:min(720px,95vw)">
     <div class="modal-title" id="dmod-label">Add MTG Deck</div>
     <input type="hidden" id="d-edit-idx" value="-1">
 
-    <!-- Commander image upload -->
     <div class="form-row">
-      <label>Commander Image (square crop applied automatically)</label>
-      <div id="cmd-preview-wrap" style="display:none"><img id="cmd-preview" class="cmd-img-preview" src="" alt="Commander"></div>
-      <button type="button" class="cmd-img-upload-btn" onclick="document.getElementById('cmd-img-input').click()">
+      <label>Commander Image (auto-cropped to square)</label>
+      <div id="cmd-preview-wrap" style="display:none;margin-bottom:0.8rem">
+        <img id="cmd-preview" style="width:120px;height:120px;object-fit:cover;display:block;border:1px solid var(--border)" src="" alt="">
+      </div>
+      <button type="button" class="cmd-upload-btn" onclick="document.getElementById('cmd-img-input').click()">
         <span style="font-size:1rem">+</span> Upload Commander Image
       </button>
       <input type="file" id="cmd-img-input" accept="image/*" style="display:none" onchange="handleCmdImg(event)">
@@ -109,22 +207,37 @@
         <select id="d-format"><option>Commander / EDH</option><option>Modern</option><option>Legacy</option><option>Standard</option><option>Pioneer</option><option>Pauper</option><option>Draft</option></select>
       </div>
       <div class="form-row"><label>Archetype / Strategy</label><input type="text" id="d-archetype" placeholder="e.g. Mill · Control"></div>
-      <div class="form-row"><label>Colors (e.g. UB, RGW)</label><input type="text" id="d-colors" placeholder="W U B R G C"></div>
-      <div class="form-row"><label>Bracket Number (1–5)</label><input type="number" id="d-bracket" min="1" max="5" placeholder="e.g. 3"></div>
+      <div class="form-row"><label>Colors (e.g. UB, RGW, 5C)</label><input type="text" id="d-colors" placeholder="W U B R G C"></div>
+
+      <div class="form-row">
+        <label>Bracket Number + Modifier</label>
+        <div style="display:flex;gap:0.5rem;align-items:center">
+          <input type="number" id="d-bracket" min="1" max="5" placeholder="1–5" style="flex:1">
+          <select id="d-bracket-mod" style="width:90px;padding:0.7rem 0.5rem">
+            <option value="">None</option>
+            <option value="+">+ (higher)</option>
+            <option value="-">– (lower)</option>
+          </select>
+        </div>
+      </div>
+
       <div class="form-row"><label>Favorite Card</label><input type="text" id="d-fav" placeholder="e.g. Tergrid, God of Fright"></div>
       <div class="form-row"><label>Status</label>
         <select id="d-status"><option>Tuned</option><option>Testing</option><option>Brewing</option><option>Retired</option></select>
       </div>
       <div class="form-row">
-        <label>Deck Rating (click stars)</label>
-        <div class="star-input" id="d-star-input" data-val="0">
-          <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
+        <label>Deck Rating</label>
+        <div class="star-input" id="d-star-input">
+          <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span>
+          <span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span>
+          <span onclick="setStars(5)">★</span>
         </div>
         <input type="hidden" id="d-rating" value="0">
       </div>
     </div>
-    <div class="form-row"><label>Deck Notes / Strategy</label><textarea id="d-notes" placeholder="What is this deck trying to do? What's the game plan?"></textarea></div>
+    <div class="form-row"><label>Deck Notes / Strategy</label><textarea id="d-notes" placeholder="What is this deck trying to do?"></textarea></div>
     <div class="form-row"><label>Moxfield / Archidekt Link (optional)</label><input type="url" id="d-link" placeholder="https://..."></div>
+
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('deck-modal')">Cancel</button>
       <button class="btn btn-primary" onclick="saveDeck()">Save Deck</button>
@@ -132,120 +245,298 @@
   </div>
 </div>
 
-<input type="file" id="cmd-img-input-hidden" accept="image/*" style="display:none">
 <script src="auth.js"></script>
 <script>
-const KEY='waanderer_decks';
-function getD(){ return JSON.parse(localStorage.getItem(KEY)||'[]'); }
+const KEY = 'waanderer_decks';
+function getD() { return JSON.parse(localStorage.getItem(KEY)||'[]'); }
 function setD(a){ localStorage.setItem(KEY,JSON.stringify(a)); }
 
-function setStars(n){
-  document.getElementById('d-rating').value=n;
-  document.querySelectorAll('#d-star-input span').forEach((s,i)=>{ s.classList.toggle('on',i<n); });
+/* ── SCRYFALL HOVER ── */
+const popup = document.getElementById('scryfall-popup');
+const spImg = document.getElementById('sp-img');
+const spLoad = document.getElementById('sp-loading');
+let scryfallCache = {};
+let hoverTimer = null;
+
+function showScryfallPopup(cardName, x, y) {
+  popup.style.left = (x + 16) + 'px';
+  popup.style.top  = Math.max(8, y - 140) + 'px';
+  spImg.style.display = 'none';
+  spLoad.style.display = 'flex';
+  popup.classList.add('visible');
+
+  if (scryfallCache[cardName]) {
+    displayPopupImg(scryfallCache[cardName]);
+    return;
+  }
+  fetch(`https://api.scryfall.com/cards/named?fuzzy=${encodeURIComponent(cardName)}`)
+    .then(r => r.json())
+    .then(data => {
+      let imgUrl = '';
+      if (data.image_uris) imgUrl = data.image_uris.normal;
+      else if (data.card_faces && data.card_faces[0].image_uris) imgUrl = data.card_faces[0].image_uris.normal;
+      scryfallCache[cardName] = imgUrl;
+      displayPopupImg(imgUrl);
+    })
+    .catch(() => { spLoad.textContent = 'Not found'; });
 }
 
-function handleCmdImg(e){
-  const file=e.target.files[0]; if(!file) return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    // crop to square via canvas
-    const img=new Image();
-    img.onload=()=>{
-      const size=Math.min(img.width,img.height);
-      const canvas=document.createElement('canvas'); canvas.width=400; canvas.height=400;
-      const ctx=canvas.getContext('2d');
-      const sx=(img.width-size)/2, sy=(img.height-size)/2;
-      ctx.drawImage(img,sx,sy,size,size,0,0,400,400);
-      const data=canvas.toDataURL('image/jpeg',0.85);
-      document.getElementById('d-img').value=data;
-      document.getElementById('cmd-preview').src=data;
-      document.getElementById('cmd-preview-wrap').style.display='block';
+function displayPopupImg(url) {
+  if (!url) { spLoad.textContent = 'No image'; return; }
+  spImg.src = url;
+  spImg.onload = () => { spLoad.style.display='none'; spImg.style.display='block'; };
+}
+
+function hideScryfallPopup() {
+  popup.classList.remove('visible');
+  spImg.style.display = 'none';
+  spLoad.style.display = 'flex';
+  spLoad.textContent = 'Loading...';
+}
+
+document.addEventListener('mousemove', e => {
+  const link = e.target.closest('.card-hover-link');
+  if (link) {
+    popup.style.left = (e.clientX + 16) + 'px';
+    popup.style.top  = Math.max(8, e.clientY - 140) + 'px';
+  }
+});
+
+/* ── STARS ── */
+function setStars(n) {
+  document.getElementById('d-rating').value = n;
+  document.querySelectorAll('#d-star-input span').forEach((s,i) => s.classList.toggle('on', i<n));
+}
+
+function starsHTML(n) {
+  return Array(5).fill(0).map((_,i) =>
+    `<span class="${i<n?'sr-filled':'sr-empty'}">★</span>`).join('');
+}
+
+/* ── COLOR BAR ── */
+function barClass(colors) {
+  const c = (colors||'').toUpperCase().replace(/\s/g,'');
+  if (c === '5C' || c === 'WUBRG') return 'bar-5C';
+  const map = {W:'bar-W',U:'bar-U',B:'bar-B',R:'bar-R',G:'bar-G',
+    WU:'bar-WU',UB:'bar-UB',BR:'bar-BR',RG:'bar-RG',GW:'bar-GW',RW:'bar-RW',WB:'bar-WUB',
+    WUB:'bar-WUB',UBR:'bar-UBR',BRG:'bar-BRG',RGW:'bar-RGW',GWU:'bar-GWU',
+    WUBR:'bar-WUBR',UBRG:'bar-UBRG'};
+  return map[c] || 'bar-def';
+}
+
+/* ── COLOR PIPS ── */
+function colorPips(colors) {
+  const valid = 'WUBRGC';
+  const chars = (colors||'').toUpperCase().replace(/\s/g,'');
+  if (chars === '5C' || chars === 'WUBRG') {
+    return ['W','U','B','R','G'].map(c => `<div class="mana-pip pip-${c}">${c}</div>`).join('');
+  }
+  return chars.split('').filter(c => valid.includes(c))
+    .map(c => `<div class="mana-pip pip-${c}">${c}</div>`).join('');
+}
+
+/* ── BRACKET DISPLAY ── */
+function bracketDisplay(bracket, mod) {
+  if (!bracket) return '';
+  const sym = mod === '+' ? '+' : mod === '-' ? '–' : '';
+  return `<div class="bracket-badge">[${bracket}${sym}]</div>`;
+}
+
+/* ── STATUS ── */
+function statusColor(s) {
+  return {Tuned:'var(--saffron)',Testing:'var(--sky)',Retired:'var(--text-dim)',Brewing:'var(--brick-light)'}[s]||'var(--text-muted)';
+}
+
+/* ── COMMANDER IMAGE ── */
+function handleCmdImg(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const size = Math.min(img.width, img.height);
+      const canvas = document.createElement('canvas'); canvas.width=400; canvas.height=400;
+      canvas.getContext('2d').drawImage(img,(img.width-size)/2,(img.height-size)/2,size,size,0,0,400,400);
+      const data = canvas.toDataURL('image/jpeg',0.85);
+      document.getElementById('d-img').value = data;
+      document.getElementById('cmd-preview').src = data;
+      document.getElementById('cmd-preview-wrap').style.display = 'block';
     };
-    img.src=ev.target.result;
+    img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
-  e.target.value='';
+  e.target.value = '';
 }
 
-function barClass(colors){
-  const c=(colors||'').toUpperCase().replace(/\s/g,'');
-  const map={'W':'bar-W','U':'bar-U','B':'bar-B','R':'bar-R','G':'bar-G','WU':'bar-WU','UB':'bar-UB','BR':'bar-BR','RG':'bar-RG','GW':'bar-GW','RW':'bar-RW','WUB':'bar-WUB','UBR':'bar-UBR','BRG':'bar-BRG','RGW':'bar-RGW','GWU':'bar-GWU'};
-  return map[c]||'bar-default';
+/* ── DRAG REORDER ── */
+let dragSrcIdx = null;
+function initDragDrop() {
+  const list = document.getElementById('deck-list');
+  list.querySelectorAll('.deck-card').forEach((card, i) => {
+    card.setAttribute('draggable','true');
+    card.dataset.idx = i;
+    card.addEventListener('dragstart', e => {
+      dragSrcIdx = i;
+      setTimeout(()=>card.classList.add('dragging'),0);
+      e.dataTransfer.effectAllowed='move';
+    });
+    card.addEventListener('dragend', ()=>{
+      card.classList.remove('dragging');
+      list.querySelectorAll('.deck-card').forEach(c=>c.classList.remove('drag-over'));
+    });
+    card.addEventListener('dragover', e=>{
+      e.preventDefault();
+      if(card.dataset.idx != dragSrcIdx) {
+        list.querySelectorAll('.deck-card').forEach(c=>c.classList.remove('drag-over'));
+        card.classList.add('drag-over');
+      }
+    });
+    card.addEventListener('drop', e=>{
+      e.preventDefault();
+      const ti = parseInt(card.dataset.idx);
+      if(dragSrcIdx===null||dragSrcIdx===ti) return;
+      const arr=getD();
+      const [m]=arr.splice(dragSrcIdx,1); arr.splice(ti,0,m);
+      setD(arr); render();
+    });
+  });
 }
 
-function manaSymbols(colors){ return (colors||'').toUpperCase().split('').filter(c=>'WUBRGC'.includes(c)).map(c=>`<div class="mana mana-${c}">${c}</div>`).join(''); }
+/* ── RENDER ── */
+function render() {
+  const decks = getD();
+  const list = document.getElementById('deck-list');
 
-function starsHTML(n){ return Array(5).fill(0).map((_,i)=>`<span class="${i<n?'deck-star-filled':'deck-star-empty'}">★</span>`).join(''); }
-
-function statusColor(s){ return {'Tuned':'var(--saffron)','Testing':'var(--sky)','Retired':'var(--text-dim)','Brewing':'var(--brick-light)'}[s]||'var(--text-muted)'; }
-
-function render(){
-  const decks=getD();
-  const cards=decks.map((d,i)=>{
-    const imgHTML=d.img
+  list.innerHTML = decks.map((d, i) => {
+    const imgHTML = d.img
       ? `<img src="${d.img}" class="deck-commander-img" alt="Commander" onclick="requireAuth(()=>editDeck(${i}))">`
       : `<div class="deck-img-placeholder" onclick="requireAuth(()=>editDeck(${i}))"><span>⬢</span><span>Add Image</span></div>`;
-    return `<div class="deck-card reveal">
+
+    const favLink = d.fav
+      ? `<span class="card-hover-link"
+          data-card="${escHtml(d.fav)}"
+          onmouseenter="clearTimeout(hoverTimer);hoverTimer=setTimeout(()=>showScryfallPopup(this.dataset.card,event.clientX,event.clientY),300)"
+          onmouseleave="clearTimeout(hoverTimer);hideScryfallPopup()"
+        >${escHtml(d.fav)}</span>`
+      : '—';
+
+    return `<div class="deck-card reveal" data-idx="${i}">
       <div class="deck-color-bar ${barClass(d.colors)}"></div>
-      ${imgHTML}
-      <div class="deck-body">
+      <div class="deck-left">
+        ${imgHTML}
+      </div>
+      <div class="deck-right">
         <div class="deck-format">${d.format}</div>
-        <div class="deck-name">${d.name}</div>
-        ${d.archetype?`<div class="deck-archetype">${d.archetype}</div>`:''}
-        ${d.colors?`<div class="mana-row">${manaSymbols(d.colors)}</div>`:''}
-        ${d.notes?`<div class="deck-notes">${d.notes}</div>`:''}
+        <div class="deck-name">${escHtml(d.name)}</div>
+        ${d.archetype ? `<div class="deck-archetype">${escHtml(d.archetype)}</div>` : ''}
+        ${d.colors ? `<div class="color-identity-row">${colorPips(d.colors)}</div>` : ''}
+        ${d.notes   ? `<div class="deck-notes">${escHtml(d.notes)}</div>` : ''}
         <div class="deck-stats">
-          ${d.bracket?`<div class="deck-stat"><label>Bracket</label><span>${d.bracket}</span></div>`:''}
+          ${d.bracket ? `<div class="deck-stat"><label>Bracket</label><div>${bracketDisplay(d.bracket,d.bracketMod)}</div></div>` : ''}
           <div class="deck-stat"><label>Status</label><span style="color:${statusColor(d.status)}">${d.status}</span></div>
-          ${d.fav?`<div class="deck-stat full"><label>Favorite Card</label><span style="color:var(--sky)">${d.fav}</span></div>`:''}
-          ${d.rating?`<div class="deck-stat full"><label>Rating</label><div class="deck-rating">${starsHTML(parseInt(d.rating))}</div></div>`:''}
+          ${d.fav ? `<div class="deck-stat full"><label>Favorite Card</label><div style="color:var(--sky);font-size:0.84rem">${favLink}</div></div>` : ''}
+          ${d.rating ? `<div class="deck-stat full"><label>Rating</label><div class="star-row">${starsHTML(parseInt(d.rating))}</div></div>` : ''}
         </div>
         <div class="deck-actions">
-          <button class="btn" onclick="requireAuth(()=>editDeck(${i}))" style="font-size:0.5rem">✎ Edit</button>
-          <button class="btn btn-danger" onclick="requireAuth(()=>deleteDeck(${i}))" style="font-size:0.5rem">✕</button>
-          ${d.link?`<a href="${d.link}" target="_blank" class="btn" style="font-size:0.5rem">↗ List</a>`:''}
+          <span class="drag-handle" title="Drag to reorder">⠿</span>
+          <button class="btn" onclick="requireAuth(()=>editDeck(${i}))" style="font-size:0.64rem">✎ Edit</button>
+          <button class="btn btn-danger" onclick="requireAuth(()=>deleteDeck(${i}))" style="font-size:0.64rem">✕</button>
+          ${d.link ? `<a href="${d.link}" target="_blank" class="btn" style="font-size:0.64rem">↗ List</a>` : ''}
         </div>
       </div>
     </div>`;
   }).join('');
-  document.getElementById('deck-list').innerHTML=cards+`<button class="deck-add-card" onclick="requireAuth(()=>openModal('deck-modal'))"><span style="font-size:1.6rem;font-weight:100">+</span><span>Add Deck</span></button>`;
-  setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible')),50);
+
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
+  },50);
+
+  initDragDrop();
 }
 
-function saveDeck(){
-  const idx=parseInt(document.getElementById('d-edit-idx').value);
-  const d={ name:document.getElementById('d-name').value.trim(), format:document.getElementById('d-format').value, archetype:document.getElementById('d-archetype').value.trim(), colors:document.getElementById('d-colors').value.trim(), bracket:document.getElementById('d-bracket').value, fav:document.getElementById('d-fav').value.trim(), status:document.getElementById('d-status').value, rating:document.getElementById('d-rating').value, notes:document.getElementById('d-notes').value.trim(), link:document.getElementById('d-link').value.trim(), img:document.getElementById('d-img').value };
-  if(!d.name) return alert('Please add a deck name.');
-  const arr=getD(); if(idx>=0) arr[idx]=d; else arr.push(d); setD(arr);
-  closeModal('deck-modal'); render();
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function deleteDeck(i){ if(!confirm('Delete this deck?')) return; const a=getD(); a.splice(i,1); setD(a); render(); }
+/* ── SAVE / EDIT / DELETE ── */
+function saveDeck() {
+  const idx = parseInt(document.getElementById('d-edit-idx').value);
+  const d = {
+    name:       document.getElementById('d-name').value.trim(),
+    format:     document.getElementById('d-format').value,
+    archetype:  document.getElementById('d-archetype').value.trim(),
+    colors:     document.getElementById('d-colors').value.trim(),
+    bracket:    document.getElementById('d-bracket').value,
+    bracketMod: document.getElementById('d-bracket-mod').value,
+    fav:        document.getElementById('d-fav').value.trim(),
+    status:     document.getElementById('d-status').value,
+    rating:     document.getElementById('d-rating').value,
+    notes:      document.getElementById('d-notes').value.trim(),
+    link:       document.getElementById('d-link').value.trim(),
+    img:        document.getElementById('d-img').value,
+  };
+  if (!d.name) return alert('Please add a deck name.');
+  const arr = getD();
+  if (idx>=0) arr[idx]=d; else arr.push(d);
+  setD(arr); closeModal('deck-modal'); render();
+}
 
-function editDeck(i){
-  const d=getD()[i];
-  document.getElementById('d-edit-idx').value=i; document.getElementById('dmod-label').textContent='Edit Deck';
-  document.getElementById('d-name').value=d.name; document.getElementById('d-format').value=d.format; document.getElementById('d-archetype').value=d.archetype||''; document.getElementById('d-colors').value=d.colors||''; document.getElementById('d-bracket').value=d.bracket||''; document.getElementById('d-fav').value=d.fav||''; document.getElementById('d-status').value=d.status; document.getElementById('d-notes').value=d.notes||''; document.getElementById('d-link').value=d.link||'';
-  const r=parseInt(d.rating)||0; document.getElementById('d-rating').value=r;
+function deleteDeck(i) {
+  if (!confirm('Delete this deck?')) return;
+  const a=getD(); a.splice(i,1); setD(a); render();
+}
+
+function editDeck(i) {
+  const d = getD()[i];
+  document.getElementById('d-edit-idx').value = i;
+  document.getElementById('dmod-label').textContent = 'Edit Deck';
+  document.getElementById('d-name').value = d.name;
+  document.getElementById('d-format').value = d.format;
+  document.getElementById('d-archetype').value = d.archetype||'';
+  document.getElementById('d-colors').value = d.colors||'';
+  document.getElementById('d-bracket').value = d.bracket||'';
+  document.getElementById('d-bracket-mod').value = d.bracketMod||'';
+  document.getElementById('d-fav').value = d.fav||'';
+  document.getElementById('d-status').value = d.status;
+  document.getElementById('d-notes').value = d.notes||'';
+  document.getElementById('d-link').value = d.link||'';
+  const r = parseInt(d.rating)||0;
+  document.getElementById('d-rating').value = r;
   document.querySelectorAll('#d-star-input span').forEach((s,i)=>s.classList.toggle('on',i<r));
-  if(d.img){ document.getElementById('d-img').value=d.img; document.getElementById('cmd-preview').src=d.img; document.getElementById('cmd-preview-wrap').style.display='block'; }
-  else { document.getElementById('d-img').value=''; document.getElementById('cmd-preview-wrap').style.display='none'; }
+  if (d.img) {
+    document.getElementById('d-img').value = d.img;
+    document.getElementById('cmd-preview').src = d.img;
+    document.getElementById('cmd-preview-wrap').style.display = 'block';
+  } else {
+    document.getElementById('d-img').value = '';
+    document.getElementById('cmd-preview-wrap').style.display = 'none';
+  }
   openModal('deck-modal');
 }
 
-function openModal(id){
-  if(id==='deck-modal'&&document.getElementById('d-edit-idx').value==='-1'){
-    document.getElementById('dmod-label').textContent='Add MTG Deck';
+/* ── MODAL HELPERS ── */
+function openModal(id) {
+  if (id==='deck-modal' && document.getElementById('d-edit-idx').value==='-1') {
+    document.getElementById('dmod-label').textContent = 'Add MTG Deck';
     ['d-name','d-archetype','d-colors','d-bracket','d-fav','d-notes','d-link','d-img'].forEach(f=>document.getElementById(f).value='');
-    document.getElementById('d-format').value='Commander / EDH'; document.getElementById('d-status').value='Brewing';
-    document.getElementById('d-rating').value=0; document.querySelectorAll('#d-star-input span').forEach(s=>s.classList.remove('on'));
+    document.getElementById('d-format').value = 'Commander / EDH';
+    document.getElementById('d-status').value = 'Brewing';
+    document.getElementById('d-bracket-mod').value = '';
+    document.getElementById('d-rating').value = 0;
+    document.querySelectorAll('#d-star-input span').forEach(s=>s.classList.remove('on'));
     document.getElementById('cmd-preview-wrap').style.display='none';
   }
-  document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden';
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow='hidden';
 }
-function closeModal(id){ document.getElementById(id).classList.remove('open'); document.getElementById('d-edit-idx').value='-1'; document.body.style.overflow=''; }
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.getElementById('d-edit-idx').value='-1';
+  document.body.style.overflow='';
+}
 document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',e=>{if(e.target===bg)closeModal(bg.id);}));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-bg.open').forEach(m=>closeModal(m.id));});
+
 render();
 </script>
 </body>
