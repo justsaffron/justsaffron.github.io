@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editor — The Waanderer's Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lilex:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.editor-layout {
+  display: grid; grid-template-columns: 260px 1fr;
+  min-height: calc(100vh - 60px); margin-top: 60px;
+}
+
+/* SIDEBAR */
+.editor-sidebar {
+  background: var(--sand-dark);
+  border-right: 1px solid var(--border);
+  padding: 2rem 0;
+  position: sticky; top: 60px; height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+.sidebar-section-label {
+  font-size: 0.48rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--text-dim); padding: 0 1.5rem; margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.sidebar-btn {
+  display: flex; align-items: center; gap: 0.8rem;
+  width: 100%; padding: 0.7rem 1.5rem;
+  background: none; border: none; font-family: var(--font);
+  font-size: 0.62rem; letter-spacing: 0.1em; color: var(--text-muted);
+  cursor: pointer; transition: all 0.2s; text-align: left;
+  border-left: 2px solid transparent;
+}
+
+.sidebar-btn:hover { color: var(--text-warm); background: rgba(232,168,74,0.04); }
+.sidebar-btn.active {
+  color: var(--sand-gold); background: rgba(232,168,74,0.06);
+  border-left-color: var(--sand-gold);
+}
+
+.sidebar-btn .icon { font-size: 0.9rem; opacity: 0.7; }
+
+.sidebar-divider {
+  height: 1px; background: var(--border); margin: 1rem 1.5rem;
+}
+
+/* MAIN PANEL */
+.editor-main {
+  padding: 3rem;
+  overflow-y: auto;
+}
+
+.editor-panel { display: none; }
+.editor-panel.active { display: block; }
+
+.panel-title {
+  font-size: 0.6rem; font-weight: 300; letter-spacing: 0.4em;
+  text-transform: uppercase; color: var(--sand-gold);
+  margin-bottom: 0.5rem;
+}
+
+.panel-subtitle {
+  font-size: 0.68rem; color: var(--text-muted); line-height: 1.7;
+  margin-bottom: 2.5rem; max-width: 60ch;
+}
+
+/* DATA TABLE */
+.data-table { width: 100%; border-collapse: collapse; }
+
+.data-table th {
+  font-size: 0.48rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--text-dim); padding: 0.6rem 1rem; text-align: left;
+  border-bottom: 1px solid var(--border); background: rgba(26,15,0,0.5);
+}
+
+.data-table td {
+  padding: 0.9rem 1rem; border-bottom: 1px solid rgba(232,168,74,0.06);
+  font-size: 0.65rem; color: var(--text-warm); vertical-align: top;
+}
+
+.data-table tr:hover td { background: rgba(232,168,74,0.02); }
+
+.data-table .td-name { color: var(--white); font-weight: 400; }
+.data-table .td-meta { color: var(--text-dim); font-size: 0.58rem; }
+.data-table .td-actions { display: flex; gap: 0.5rem; }
+
+.badge {
+  font-size: 0.48rem; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 0.15rem 0.6rem; border: 1px solid var(--border); color: var(--text-dim);
+}
+
+/* OVERVIEW STATS */
+.stats-row {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1px; background: var(--border); margin-bottom: 3rem;
+}
+
+.stat-box {
+  background: var(--sand-dark); padding: 1.5rem;
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 2.5rem; font-weight: 100; color: var(--sand-gold);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.52rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--text-dim); margin-top: 0.5rem;
+}
+
+/* EXPORT/IMPORT */
+.data-actions {
+  display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;
+  padding: 1.5rem; background: rgba(26,15,0,0.5);
+  border: 1px solid var(--border);
+}
+
+.data-actions p {
+  font-size: 0.62rem; color: var(--text-muted); width: 100%; line-height: 1.6;
+}
+
+/* ABOUT EDITOR */
+.help-block {
+  padding: 1.5rem; background: rgba(42,107,168,0.06);
+  border: 1px solid rgba(74,159,212,0.15); margin-bottom: 2rem;
+}
+
+.help-block p { font-size: 0.65rem; color: var(--text-muted); line-height: 1.8; }
+.help-block strong { color: var(--sand-light); font-weight: 400; }
+</style>
+</head>
+<body>
+
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;background:rgba(26,15,0,0.98);border-bottom:1px solid rgba(232,168,74,0.12);">
+  <a class="nav-logo" href="index.html">The Waanderer's Log</a>
+  <div style="display:flex;align-items:center;gap:1rem">
+    <span style="font-size:0.55rem;letter-spacing:0.2em;color:var(--sand-warm)">✦ CONTENT EDITOR</span>
+    <a href="index.html" class="btn" style="font-size:0.5rem;padding:0.4rem 1rem">← Back to Site</a>
+  </div>
+</nav>
+
+<div class="editor-layout">
+
+  <!-- SIDEBAR -->
+  <div class="editor-sidebar">
+    <div class="sidebar-section-label">Overview</div>
+    <button class="sidebar-btn active" onclick="showPanel('overview', this)">
+      <span class="icon">◎</span> Dashboard
+    </button>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-label">Manage Content</div>
+
+    <button class="sidebar-btn" onclick="showPanel('projects', this)">
+      <span class="icon">⬡</span> PM Projects
+    </button>
+    <button class="sidebar-btn" onclick="showPanel('mtg', this)">
+      <span class="icon">⬢</span> MTG Decks
+    </button>
+    <button class="sidebar-btn" onclick="showPanel('moodboards', this)">
+      <span class="icon">◈</span> Moodboards
+    </button>
+    <button class="sidebar-btn" onclick="showPanel('photography', this)">
+      <span class="icon">◎</span> Photography
+    </button>
+    <button class="sidebar-btn" onclick="showPanel('reviews', this)">
+      <span class="icon">◇</span> Reviews
+    </button>
+    <button class="sidebar-btn" onclick="showPanel('resources', this)">
+      <span class="icon">◉</span> Resources
+    </button>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-label">Site Settings</div>
+    <button class="sidebar-btn" onclick="showPanel('data', this)">
+      <span class="icon">◫</span> Backup &amp; Restore
+    </button>
+    <button class="sidebar-btn" onclick="showPanel('help', this)">
+      <span class="icon">?</span> Help &amp; Guide
+    </button>
+  </div>
+
+  <!-- MAIN -->
+  <div class="editor-main">
+
+    <!-- OVERVIEW -->
+    <div class="editor-panel active" id="panel-overview">
+      <div class="panel-title">Dashboard</div>
+      <div class="panel-subtitle">Welcome to The Waanderer's Log editor. All your content is stored in your browser. Use the sidebar to add, edit, or remove items in each section.</div>
+
+      <div class="stats-row" id="stats-row">
+        <div class="stat-box"><div class="stat-num" id="stat-projects">0</div><div class="stat-label">Projects</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-mtg">0</div><div class="stat-label">Decks</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-boards">0</div><div class="stat-label">Moodboards</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-photos">0</div><div class="stat-label">Photos</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-reviews">0</div><div class="stat-label">Reviews</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-resources">0</div><div class="stat-label">Resources</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
+        <div style="background:var(--sand-dark);padding:2rem">
+          <div style="font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--sand-warm);margin-bottom:1rem">Quick Actions</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="projects.html" class="btn btn-primary" style="justify-content:space-between">PM Projects <span>→</span></a>
+            <a href="mtg.html" class="btn btn-primary" style="justify-content:space-between">MTG Decks <span>→</span></a>
+            <a href="moodboards.html" class="btn btn-primary" style="justify-content:space-between">Moodboards <span>→</span></a>
+            <a href="photography.html" class="btn btn-primary" style="justify-content:space-between">Photography <span>→</span></a>
+            <a href="reviews.html" class="btn btn-primary" style="justify-content:space-between">Reviews <span>→</span></a>
+            <a href="resources.html" class="btn btn-primary" style="justify-content:space-between">Resources <span>→</span></a>
+          </div>
+        </div>
+        <div style="background:var(--sand-dark);padding:2rem">
+          <div style="font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--sand-warm);margin-bottom:1rem">Recent Items</div>
+          <div id="recent-items" style="font-size:0.62rem;color:var(--text-muted);line-height:2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECTS PANEL -->
+    <div class="editor-panel" id="panel-projects">
+      <div class="panel-title">PM Projects</div>
+      <div class="panel-subtitle">Add, edit, or delete your product management projects.</div>
+      <div style="margin-bottom:1rem"><a href="projects.html" class="btn btn-primary">+ Add New Project on Projects Page</a></div>
+      <div id="proj-table-wrap"></div>
+    </div>
+
+    <!-- MTG PANEL -->
+    <div class="editor-panel" id="panel-mtg">
+      <div class="panel-title">MTG Decks</div>
+      <div class="panel-subtitle">Manage all your Magic the Gathering decks.</div>
+      <div style="margin-bottom:1rem"><a href="mtg.html" class="btn btn-primary">+ Add New Deck on MTG Page</a></div>
+      <div id="mtg-table-wrap"></div>
+    </div>
+
+    <!-- MOODBOARDS PANEL -->
+    <div class="editor-panel" id="panel-moodboards">
+      <div class="panel-title">Moodboards</div>
+      <div class="panel-subtitle">View and manage your visual moodboard collections.</div>
+      <div style="margin-bottom:1rem"><a href="moodboards.html" class="btn btn-primary">→ Go to Moodboards Page</a></div>
+      <div id="boards-table-wrap"></div>
+    </div>
+
+    <!-- PHOTOGRAPHY PANEL -->
+    <div class="editor-panel" id="panel-photography">
+      <div class="panel-title">Photography</div>
+      <div class="panel-subtitle">View your uploaded photos.</div>
+      <div style="margin-bottom:1rem"><a href="photography.html" class="btn btn-primary">→ Go to Photography Page</a></div>
+      <div id="photo-table-wrap"></div>
+    </div>
+
+    <!-- REVIEWS PANEL -->
+    <div class="editor-panel" id="panel-reviews">
+      <div class="panel-title">Reviews</div>
+      <div class="panel-subtitle">Manage your book and game reviews.</div>
+      <div style="margin-bottom:1rem"><a href="reviews.html" class="btn btn-primary">+ Add New Review on Reviews Page</a></div>
+      <div id="reviews-table-wrap"></div>
+    </div>
+
+    <!-- RESOURCES PANEL -->
+    <div class="editor-panel" id="panel-resources">
+      <div class="panel-title">Resources &amp; Writing</div>
+      <div class="panel-subtitle">Manage your saved resources and articles.</div>
+      <div style="margin-bottom:1rem"><a href="resources.html" class="btn btn-primary">+ Add New Resource on Resources Page</a></div>
+      <div id="res-table-wrap"></div>
+    </div>
+
+    <!-- DATA PANEL -->
+    <div class="editor-panel" id="panel-data">
+      <div class="panel-title">Backup &amp; Restore</div>
+      <div class="panel-subtitle">Export all your content as a JSON backup file, or import a previous backup. This lets you move your data between browsers or devices.</div>
+
+      <div class="data-actions">
+        <p><strong style="color:var(--sand-light)">⚠ Important:</strong> Your content is stored in your browser's local storage. It will persist across sessions in the same browser, but won't sync to other devices automatically. Use the export/import below to transfer your data.</p>
+        <button class="btn btn-primary" onclick="exportData()">⬇ Export All Data (JSON)</button>
+        <button class="btn" onclick="document.getElementById('import-file').click()">⬆ Import Backup</button>
+        <button class="btn btn-danger" onclick="clearAllData()">✕ Clear All Data</button>
+        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+      </div>
+    </div>
+
+    <!-- HELP PANEL -->
+    <div class="editor-panel" id="panel-help">
+      <div class="panel-title">Help &amp; Guide</div>
+      <div class="panel-subtitle">How to use The Waanderer's Log — no coding needed.</div>
+
+      <div class="help-block" style="margin-bottom:1px">
+        <p><strong>Adding content:</strong> Navigate to any section page (Projects, MTG, Reviews, etc.) and click the <strong>"+ Add"</strong> button in the top right. Fill in the form and hit save.</p>
+      </div>
+      <div class="help-block" style="margin-bottom:1px">
+        <p><strong>Editing content:</strong> Hover over any item and click the <strong>✎ Edit</strong> button to modify it. Changes save immediately.</p>
+      </div>
+      <div class="help-block" style="margin-bottom:1px">
+        <p><strong>Uploading images:</strong> For moodboards, open a board and click <strong>+ Add Images</strong> to upload multiple images at once. For photography, click <strong>+ Upload Photos</strong> on the Photography page.</p>
+      </div>
+      <div class="help-block" style="margin-bottom:1px">
+        <p><strong>Where is my data stored?</strong> Everything is saved in your browser's local storage. It stays there when you close the tab and reopen it. Use the <strong>Backup &amp; Restore</strong> panel to export a JSON backup and import it on a new device.</p>
+      </div>
+      <div class="help-block" style="margin-bottom:1px">
+        <p><strong>Hosting on GitHub Pages:</strong> Upload all the HTML and CSS files to a GitHub repository named <strong>yourusername.github.io</strong> and enable GitHub Pages in Settings. Your site will be live at that URL.</p>
+      </div>
+      <div class="help-block">
+        <p><strong>Photos and images:</strong> Because GitHub Pages serves static files, uploaded images are stored as base64 data in your browser's local storage — they won't appear on other devices unless you export and import your data backup. For large photo collections, consider linking to images hosted elsewhere (Google Photos, Imgur, etc.) by entering the URL instead.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showPanel(name, btn) {
+  document.querySelectorAll('.editor-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
+  populatePanel(name);
+}
+
+function get(key) { return JSON.parse(localStorage.getItem(key) || '[]'); }
+
+function updateStats() {
+  document.getElementById('stat-projects').textContent  = get('waanderer_projects').length;
+  document.getElementById('stat-mtg').textContent       = get('waanderer_decks').length;
+  document.getElementById('stat-boards').textContent    = get('waanderer_boards').length;
+  document.getElementById('stat-photos').textContent    = get('waanderer_photos').length;
+  document.getElementById('stat-reviews').textContent   = get('waanderer_reviews').length;
+  document.getElementById('stat-resources').textContent = get('waanderer_resources').length;
+
+  // recent items
+  const all = [
+    ...get('waanderer_projects').map(p => ({ label: p.name, type: 'Project', date: p.date })),
+    ...get('waanderer_decks').map(d => ({ label: d.name, type: 'Deck', date: '' })),
+    ...get('waanderer_reviews').map(r => ({ label: r.title, type: r.type === 'books' ? 'Book' : 'Game', date: '' })),
+    ...get('waanderer_resources').map(r => ({ label: r.title, type: r.type, date: r.date })),
+  ].slice(-8).reverse();
+
+  const rDiv = document.getElementById('recent-items');
+  rDiv.innerHTML = all.length ? all.map(a =>
+    `<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(232,168,74,0.06);padding:0.3rem 0">
+      <span>${a.label}</span>
+      <span style="color:var(--text-dim);font-size:0.52rem">${a.type}</span>
+    </div>`
+  ).join('') : '<span>No items yet — start adding content!</span>';
+}
+
+function populatePanel(name) {
+  if (name === 'overview') { updateStats(); return; }
+  if (name === 'projects') buildTable('proj-table-wrap', get('waanderer_projects'), ['name','status','time'], 'waanderer_projects');
+  if (name === 'mtg')      buildTable('mtg-table-wrap', get('waanderer_decks'), ['name','format','status'], 'waanderer_decks');
+  if (name === 'reviews')  buildTable('reviews-table-wrap', get('waanderer_reviews'), ['title','type','rating'], 'waanderer_reviews', true);
+  if (name === 'resources') buildTable('res-table-wrap', get('waanderer_resources'), ['title','type'], 'waanderer_resources');
+  if (name === 'moodboards') {
+    const boards = get('waanderer_boards');
+    document.getElementById('boards-table-wrap').innerHTML = boards.length ?
+      boards.map((b,i) => `<div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background:var(--sand-dark);margin-bottom:1px">
+        <div><div style="font-size:0.75rem;color:var(--white)">${b.name}</div><div style="font-size:0.55rem;color:var(--text-dim)">${(b.images||[]).length} images</div></div>
+        <button class="btn btn-danger" onclick="deleteItem('waanderer_boards', ${i})" style="font-size:0.5rem;">✕ Delete</button>
+      </div>`).join('') : '<p style="color:var(--text-dim);font-size:0.62rem">No boards yet.</p>';
+  }
+  if (name === 'photography') {
+    const photos = get('waanderer_photos');
+    document.getElementById('photo-table-wrap').innerHTML = photos.length ?
+      photos.map((p,i) => `<div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background:var(--sand-dark);margin-bottom:1px;gap:1rem">
+        <img src="${p.src}" style="width:50px;height:40px;object-fit:cover">
+        <div style="flex:1"><div style="font-size:0.72rem;color:var(--white)">${p.title || '(untitled)'}</div><div style="font-size:0.55rem;color:var(--text-dim)">${p.loc || ''}</div></div>
+        <button class="btn btn-danger" onclick="deleteItem('waanderer_photos', ${i})" style="font-size:0.5rem;">✕</button>
+      </div>`).join('') : '<p style="color:var(--text-dim);font-size:0.62rem">No photos yet.</p>';
+  }
+}
+
+function buildTable(wrapperId, items, fields, storageKey, isReview) {
+  const wrap = document.getElementById(wrapperId);
+  if (!items.length) { wrap.innerHTML = '<p style="color:var(--text-dim);font-size:0.62rem;padding:1rem 0">Nothing here yet.</p>'; return; }
+  wrap.innerHTML = `<table class="data-table"><thead><tr>
+    ${fields.map(f => `<th>${f.toUpperCase()}</th>`).join('')}
+    <th>ACTIONS</th>
+  </tr></thead><tbody>
+    ${items.map((item, i) => `<tr>
+      ${fields.map(f => `<td class="${f === fields[0] ? 'td-name' : 'td-meta'}">${f === 'rating' ? '★'.repeat(item[f] || 0) : (item[f] || '—')}</td>`).join('')}
+      <td><div class="td-actions">
+        <button class="btn btn-danger" onclick="deleteItem('${storageKey}', ${i})" style="font-size:0.5rem;padding:0.3rem 0.6rem">✕ Delete</button>
+      </div></td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function deleteItem(key, idx) {
+  if (!confirm('Delete this item?')) return;
+  const arr = JSON.parse(localStorage.getItem(key) || '[]');
+  arr.splice(idx, 1);
+  localStorage.setItem(key, JSON.stringify(arr));
+  updateStats();
+  // re-render current panel
+  const active = document.querySelector('.sidebar-btn.active');
+  const panelName = active?.onclick?.toString().match(/'(\w+)'/)?.[1];
+  if (panelName) populatePanel(panelName);
+}
+
+function exportData() {
+  const data = {
+    projects:  JSON.parse(localStorage.getItem('waanderer_projects') || '[]'),
+    decks:     JSON.parse(localStorage.getItem('waanderer_decks') || '[]'),
+    boards:    JSON.parse(localStorage.getItem('waanderer_boards') || '[]'),
+    photos:    JSON.parse(localStorage.getItem('waanderer_photos') || '[]'),
+    reviews:   JSON.parse(localStorage.getItem('waanderer_reviews') || '[]'),
+    resources: JSON.parse(localStorage.getItem('waanderer_resources') || '[]'),
+    exported:  new Date().toISOString(),
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `waanderers-log-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (confirm(`Import backup from ${data.exported ? new Date(data.exported).toLocaleDateString() : 'unknown date'}? This will REPLACE your current data.`)) {
+        if (data.projects)  localStorage.setItem('waanderer_projects',  JSON.stringify(data.projects));
+        if (data.decks)     localStorage.setItem('waanderer_decks',     JSON.stringify(data.decks));
+        if (data.boards)    localStorage.setItem('waanderer_boards',    JSON.stringify(data.boards));
+        if (data.photos)    localStorage.setItem('waanderer_photos',    JSON.stringify(data.photos));
+        if (data.reviews)   localStorage.setItem('waanderer_reviews',   JSON.stringify(data.reviews));
+        if (data.resources) localStorage.setItem('waanderer_resources', JSON.stringify(data.resources));
+        alert('✓ Import successful!');
+        updateStats();
+      }
+    } catch { alert('Invalid backup file.'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function clearAllData() {
+  if (!confirm('Clear ALL data? This cannot be undone.')) return;
+  ['waanderer_projects','waanderer_decks','waanderer_boards','waanderer_photos','waanderer_reviews','waanderer_resources'].forEach(k => localStorage.removeItem(k));
+  updateStats();
+  alert('All data cleared.');
+}
+
+updateStats();
+</script>
+</body>
+</html>

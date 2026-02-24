@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTG Decks — The Waanderer's Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lilex:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.deck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1px; background: var(--border);
+}
+
+.deck-card {
+  background: var(--sand-dark); padding: 2rem;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 0.9rem;
+}
+
+.deck-color-bar {
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+
+.deck-format {
+  font-size: 0.52rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--sand-warm);
+}
+
+.deck-name { font-size: 1.15rem; font-weight: 400; color: var(--white); line-height: 1.2; }
+.deck-archetype { font-size: 0.63rem; color: var(--text-dim); font-style: italic; }
+
+.mana-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+.mana {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.58rem; font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.mana-W { background: #f9f6ee; color: #3a3020; }
+.mana-U { background: #0e68ab; color: #fff; }
+.mana-B { background: #150b00; color: #c4b5a0; border-color: #c4b5a0; }
+.mana-R { background: #d3202a; color: #fff; }
+.mana-G { background: #00733e; color: #fff; }
+.mana-C { background: #ccc2c0; color: #333; }
+
+.deck-notes {
+  font-size: 0.65rem; font-weight: 300; line-height: 1.7;
+  color: var(--text-muted); flex: 1;
+}
+
+.deck-stats {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;
+  border-top: 1px solid var(--border); padding-top: 1rem;
+}
+
+.deck-stat label {
+  display: block; font-size: 0.48rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--text-dim);
+}
+
+.deck-stat span { font-size: 0.68rem; color: var(--text-warm); }
+
+.deck-actions {
+  display: flex; gap: 0.6rem; padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.deck-add-card {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 0.8rem; min-height: 200px;
+  border: 1px dashed rgba(232,168,74,0.15); background: transparent;
+  color: var(--text-dim); font-size: 0.6rem; letter-spacing: 0.2em;
+  text-transform: uppercase; cursor: pointer; transition: all 0.3s;
+}
+
+.deck-add-card:hover {
+  border-color: rgba(232,168,74,0.4); color: var(--sand-gold);
+  background: rgba(232,168,74,0.03);
+}
+
+/* color gradient helpers */
+.bar-WU  { background: linear-gradient(90deg, #f9f6ee, #0e68ab); }
+.bar-UB  { background: linear-gradient(90deg, #0e68ab, #150b00); }
+.bar-BR  { background: linear-gradient(90deg, #150b00, #d3202a); }
+.bar-RG  { background: linear-gradient(90deg, #d3202a, #00733e); }
+.bar-GW  { background: linear-gradient(90deg, #00733e, #f9f6ee); }
+.bar-WUB { background: linear-gradient(90deg, #f9f6ee, #0e68ab, #150b00); }
+.bar-UBR { background: linear-gradient(90deg, #0e68ab, #150b00, #d3202a); }
+.bar-BRG { background: linear-gradient(90deg, #150b00, #d3202a, #00733e); }
+.bar-RGW { background: linear-gradient(90deg, #d3202a, #00733e, #f9f6ee); }
+.bar-GWU { background: linear-gradient(90deg, #00733e, #f9f6ee, #0e68ab); }
+.bar-R   { background: #d3202a; }
+.bar-U   { background: #0e68ab; }
+.bar-B   { background: #150b00; }
+.bar-G   { background: #00733e; }
+.bar-W   { background: #f9f6ee; }
+.bar-RW  { background: linear-gradient(90deg, #d3202a, #f9f6ee); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">The Waanderer's Log</a>
+  <ul class="nav-links">
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="mtg.html" class="active">MTG</a></li>
+    <li><a href="moodboards.html">Moodboards</a></li>
+    <li><a href="photography.html">Photography</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="editor.html" class="edit-link">✦ Edit</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-left">
+    <p class="page-eyebrow">02 · Magic the Gathering</p>
+    <h1 class="page-title">The <em>Decks</em></h1>
+    <p class="page-subtitle">Every deck built, tuned, tested, and retired. Commanders, archetypes, win rates, and notes on what the deck is trying to do.</p>
+  </div>
+  <button class="btn btn-primary" onclick="openModal('deck-modal')">+ Add Deck</button>
+</div>
+
+<div class="page-content">
+  <div class="deck-grid" id="deck-list"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="site-footer-sig">The Waanderer's Log · <a href="index.html">← Home</a></div>
+  <a href="editor.html" class="btn btn-primary">✦ Edit Content</a>
+</footer>
+
+<!-- DECK MODAL -->
+<div class="modal-bg" id="deck-modal">
+  <div class="modal">
+    <div class="modal-title" id="deck-modal-label">Add MTG Deck</div>
+    <input type="hidden" id="deck-edit-idx" value="-1">
+    <div class="form-grid">
+      <div class="form-row"><label>Deck Name *</label><input type="text" id="d-name" placeholder="e.g. Umbris, Fear Manifest"></div>
+      <div class="form-row"><label>Format</label>
+        <select id="d-format">
+          <option>Commander / EDH</option><option>Modern</option>
+          <option>Legacy</option><option>Standard</option>
+          <option>Pioneer</option><option>Pauper</option><option>Draft</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Archetype / Strategy</label><input type="text" id="d-archetype" placeholder="e.g. Mill · Control"></div>
+      <div class="form-row"><label>Colors (e.g. UB, RGW)</label><input type="text" id="d-colors" placeholder="W U B R G C"></div>
+      <div class="form-row"><label>Win Rate %</label><input type="text" id="d-winrate" placeholder="e.g. ~42%"></div>
+      <div class="form-row"><label>Avg CMC</label><input type="text" id="d-cmc" placeholder="e.g. 2.8"></div>
+      <div class="form-row"><label>Card Count</label><input type="number" id="d-cards" value="100"></div>
+      <div class="form-row"><label>Status</label>
+        <select id="d-status">
+          <option>Tuned</option><option>Testing</option><option>Brewing</option><option>Retired</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row"><label>Deck Notes / Strategy</label><textarea id="d-notes" placeholder="What is this deck trying to do? What's the game plan?"></textarea></div>
+    <div class="form-row"><label>Moxfield / Archidekt Link (optional)</label><input type="url" id="d-link" placeholder="https://..."></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('deck-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveDeck()">Save Deck</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const KEY = 'waanderer_decks';
+
+function getDecks() { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
+function setDecks(a) { localStorage.setItem(KEY, JSON.stringify(a)); }
+
+function manaBar(colors) {
+  const c = colors.toUpperCase().replace(/\s/g,'');
+  if (c.length === 1) return `bar-${c}`;
+  if (c.length === 2) return `bar-${c}`;
+  if (c.length === 3) return `bar-${c}`;
+  return '';
+}
+
+function manaSymbols(colors) {
+  return colors.toUpperCase().split('').filter(c => 'WUBRGC'.includes(c))
+    .map(c => `<div class="mana mana-${c}">${c}</div>`).join('');
+}
+
+function statusColor(s) {
+  if (s === 'Tuned') return 'var(--sand-gold)';
+  if (s === 'Testing') return 'var(--sky-light)';
+  if (s === 'Retired') return 'var(--text-dim)';
+  return 'var(--terra-light)';
+}
+
+function render() {
+  const decks = getDecks();
+  const list = document.getElementById('deck-list');
+
+  const cards = decks.map((d, i) => {
+    const barClass = manaBar(d.colors || '');
+    return `
+    <div class="deck-card reveal">
+      <div class="deck-color-bar ${barClass}"></div>
+      <div class="deck-format">${d.format}</div>
+      <div class="deck-name">${d.name}</div>
+      ${d.archetype ? `<div class="deck-archetype">${d.archetype}</div>` : ''}
+      ${d.colors ? `<div class="mana-row">${manaSymbols(d.colors)}</div>` : ''}
+      ${d.notes ? `<div class="deck-notes">${d.notes}</div>` : ''}
+      <div class="deck-stats">
+        <div class="deck-stat"><label>Cards</label><span>${d.cards || '—'}</span></div>
+        <div class="deck-stat"><label>Status</label><span style="color:${statusColor(d.status)}">${d.status}</span></div>
+        <div class="deck-stat"><label>Win Rate</label><span>${d.winrate || '—'}</span></div>
+        <div class="deck-stat"><label>Avg CMC</label><span>${d.cmc || '—'}</span></div>
+      </div>
+      <div class="deck-actions">
+        <button class="btn" onclick="editDeck(${i})" style="font-size:0.5rem;">✎ Edit</button>
+        <button class="btn btn-danger" onclick="deleteDeck(${i})" style="font-size:0.5rem;">✕</button>
+        ${d.link ? `<a href="${d.link}" target="_blank" class="btn" style="font-size:0.5rem;">↗ View List</a>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  list.innerHTML = cards + `
+    <div class="deck-add-card" onclick="openModal('deck-modal')">
+      <span style="font-size:1.6rem;font-weight:100">+</span>
+      <span>Add Deck</span>
+    </div>`;
+
+  setTimeout(revealAll, 50);
+}
+
+function saveDeck() {
+  const idx = parseInt(document.getElementById('deck-edit-idx').value);
+  const d = {
+    name:      document.getElementById('d-name').value.trim(),
+    format:    document.getElementById('d-format').value,
+    archetype: document.getElementById('d-archetype').value.trim(),
+    colors:    document.getElementById('d-colors').value.trim(),
+    winrate:   document.getElementById('d-winrate').value.trim(),
+    cmc:       document.getElementById('d-cmc').value.trim(),
+    cards:     document.getElementById('d-cards').value,
+    status:    document.getElementById('d-status').value,
+    notes:     document.getElementById('d-notes').value.trim(),
+    link:      document.getElementById('d-link').value.trim(),
+  };
+  if (!d.name) return alert('Please add a deck name.');
+  const decks = getDecks();
+  if (idx >= 0) decks[idx] = d; else decks.push(d);
+  setDecks(decks);
+  closeModal('deck-modal');
+  render();
+}
+
+function deleteDeck(i) {
+  if (!confirm('Delete this deck?')) return;
+  const decks = getDecks(); decks.splice(i, 1); setDecks(decks); render();
+}
+
+function editDeck(i) {
+  const d = getDecks()[i];
+  document.getElementById('deck-edit-idx').value = i;
+  document.getElementById('deck-modal-label').textContent = 'Edit Deck';
+  document.getElementById('d-name').value = d.name;
+  document.getElementById('d-format').value = d.format;
+  document.getElementById('d-archetype').value = d.archetype || '';
+  document.getElementById('d-colors').value = d.colors || '';
+  document.getElementById('d-winrate').value = d.winrate || '';
+  document.getElementById('d-cmc').value = d.cmc || '';
+  document.getElementById('d-cards').value = d.cards || 100;
+  document.getElementById('d-status').value = d.status;
+  document.getElementById('d-notes').value = d.notes || '';
+  document.getElementById('d-link').value = d.link || '';
+  openModal('deck-modal');
+}
+
+function openModal(id) {
+  if (id === 'deck-modal' && document.getElementById('deck-edit-idx').value === '-1') {
+    document.getElementById('deck-modal-label').textContent = 'Add MTG Deck';
+    ['d-name','d-archetype','d-colors','d-winrate','d-cmc','d-notes','d-link'].forEach(f => document.getElementById(f).value = '');
+    document.getElementById('d-cards').value = 100;
+    document.getElementById('d-format').value = 'Commander / EDH';
+    document.getElementById('d-status').value = 'Brewing';
+  }
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.getElementById('deck-edit-idx').value = '-1';
+  document.body.style.overflow = '';
+}
+
+function revealAll() {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+}
+
+document.querySelectorAll('.modal-bg').forEach(bg => {
+  bg.addEventListener('click', e => { if (e.target === bg) closeModal(bg.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-bg.open').forEach(m => closeModal(m.id));
+});
+
+render();
+</script>
+</body>
+</html>

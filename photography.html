@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photography — The Waanderer's Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lilex:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.photo-filters {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; align-items: center;
+}
+
+.filter-btn {
+  font-family: var(--font); font-size: 0.55rem; letter-spacing: 0.2em;
+  text-transform: uppercase; padding: 0.4rem 1rem;
+  border: 1px solid var(--border); background: none;
+  color: var(--text-dim); cursor: pointer; transition: all 0.2s;
+}
+.filter-btn:hover, .filter-btn.active {
+  border-color: rgba(232,168,74,0.35); color: var(--sand-gold);
+}
+
+.photo-masonry {
+  columns: 3; column-gap: 1px;
+}
+
+@media (max-width: 800px) { .photo-masonry { columns: 2; } }
+@media (max-width: 500px) { .photo-masonry { columns: 1; } }
+
+.photo-item {
+  break-inside: avoid; margin-bottom: 1px;
+  position: relative; overflow: hidden; cursor: pointer;
+  background: var(--sand-dark);
+}
+
+.photo-item img {
+  width: 100%; display: block;
+  filter: saturate(0.82) brightness(0.92);
+  transition: filter 0.4s, transform 0.6s;
+}
+
+.photo-item:hover img {
+  filter: saturate(1.05) brightness(1);
+  transform: scale(1.02);
+}
+
+.photo-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 1.5rem 1rem 0.8rem;
+  background: linear-gradient(0deg, rgba(26,15,0,0.92) 0%, transparent 100%);
+  opacity: 0; transition: opacity 0.3s;
+}
+
+.photo-item:hover .photo-caption { opacity: 1; }
+
+.photo-caption-title { font-size: 0.68rem; color: var(--white); }
+.photo-caption-loc   { font-size: 0.52rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+.photo-caption-del {
+  position: absolute; top: 0.5rem; right: 0.5rem;
+  background: rgba(26,15,0,0.85); border: none; color: var(--terra);
+  font-size: 0.58rem; cursor: pointer; padding: 0.2rem 0.5rem;
+  font-family: var(--font);
+}
+
+/* LIGHTBOX */
+.photo-lightbox {
+  position: fixed; inset: 0; background: rgba(8,5,0,0.97);
+  z-index: 600; display: none; align-items: center; justify-content: center;
+  flex-direction: column;
+}
+
+.photo-lightbox.open { display: flex; }
+
+.photo-lightbox img {
+  max-width: 90vw; max-height: 80vh; object-fit: contain;
+}
+
+.photo-lightbox-info {
+  margin-top: 1rem; text-align: center;
+}
+
+.photo-lightbox-close {
+  position: absolute; top: 1.5rem; right: 2rem;
+  background: none; border: none; color: var(--text-muted);
+  font-size: 1.4rem; cursor: pointer; font-family: var(--font);
+}
+
+.photo-lb-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(26,15,0,0.7); border: 1px solid var(--border);
+  color: var(--text-warm); font-size: 1.2rem; cursor: pointer;
+  padding: 0.8rem; font-family: var(--font); transition: all 0.2s;
+}
+.photo-lb-nav:hover { background: rgba(45,26,5,0.9); color: var(--white); }
+.photo-lb-nav.prev { left: 1.5rem; }
+.photo-lb-nav.next { right: 1.5rem; }
+
+.add-photo-zone {
+  border: 1px dashed rgba(232,168,74,0.15); padding: 4rem 2rem;
+  text-align: center; color: var(--text-dim); cursor: pointer;
+  transition: all 0.3s; margin-top: 1px; background: none;
+  width: 100%; font-family: var(--font);
+}
+.add-photo-zone:hover { border-color: rgba(232,168,74,0.35); color: var(--sand-gold); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">The Waanderer's Log</a>
+  <ul class="nav-links">
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="mtg.html">MTG</a></li>
+    <li><a href="moodboards.html">Moodboards</a></li>
+    <li><a href="photography.html" class="active">Photography</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="editor.html" class="edit-link">✦ Edit</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-left">
+    <p class="page-eyebrow">04 · Photography</p>
+    <h1 class="page-title">Moments <em>Caught</em></h1>
+    <p class="page-subtitle">Personal photography from travels and everyday observation. Each image is a moment from the wander.</p>
+  </div>
+  <button class="btn btn-primary" onclick="document.getElementById('photo-upload').click()">+ Upload Photos</button>
+</div>
+
+<div class="page-content">
+  <div class="photo-filters" id="tag-filters">
+    <button class="filter-btn active" onclick="filterTag('all', this)">All</button>
+  </div>
+  <div class="photo-masonry" id="photo-grid"></div>
+  <button class="add-photo-zone" onclick="document.getElementById('photo-upload').click()">
+    <div style="font-size:1.8rem;font-weight:100;margin-bottom:0.5rem">+</div>
+    <div style="font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase">Upload Photos</div>
+    <div style="font-size:0.58rem;color:var(--text-dim);margin-top:0.4rem">Click or drag images here</div>
+  </button>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="photo-lightbox" id="photo-lightbox">
+  <button class="photo-lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="photo-lb-nav prev" onclick="lbNav(-1)">‹</button>
+  <button class="photo-lb-nav next" onclick="lbNav(1)">›</button>
+  <img id="lb-img" src="" alt="">
+  <div class="photo-lightbox-info">
+    <div id="lb-caption-title" style="font-size:0.8rem;color:var(--white)"></div>
+    <div id="lb-caption-loc" style="font-size:0.58rem;color:var(--text-muted);margin-top:0.3rem"></div>
+  </div>
+</div>
+
+<!-- ADD PHOTO MODAL -->
+<div class="modal-bg" id="photo-meta-modal">
+  <div class="modal">
+    <div class="modal-title">Photo Details</div>
+    <div id="photo-preview-container" style="margin-bottom:1.5rem;text-align:center"></div>
+    <div class="form-row"><label>Title (optional)</label><input type="text" id="ph-title" placeholder="e.g. Medina at Dusk"></div>
+    <div class="form-row"><label>Location</label><input type="text" id="ph-loc" placeholder="e.g. Marrakech, Morocco"></div>
+    <div class="form-row"><label>Date</label><input type="date" id="ph-date"></div>
+    <div class="form-row"><label>Tags (comma-separated)</label><input type="text" id="ph-tags" placeholder="e.g. travel, architecture, golden hour"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="skipMeta()">Skip</button>
+      <button class="btn btn-primary" onclick="saveMeta()">Save</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="photo-upload" accept="image/*" multiple style="display:none" onchange="handleUpload(event)">
+
+<script>
+const KEY = 'waanderer_photos';
+let pendingPhotos = [];
+let pendingIdx = 0;
+let lbIdx = 0;
+let activeTag = 'all';
+
+function getPhotos() { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
+function setPhotos(a) { localStorage.setItem(KEY, JSON.stringify(a)); }
+
+function handleUpload(e) {
+  const files = Array.from(e.target.files);
+  pendingPhotos = [];
+  pendingIdx = 0;
+  let loaded = 0;
+  files.forEach(f => {
+    const r = new FileReader();
+    r.onload = ev => {
+      pendingPhotos.push({ src: ev.target.result, title:'', loc:'', date:'', tags:[] });
+      loaded++;
+      if (loaded === files.length) showNextMeta();
+    };
+    r.readAsDataURL(f);
+  });
+  e.target.value = '';
+}
+
+function showNextMeta() {
+  if (pendingIdx >= pendingPhotos.length) {
+    // save all
+    const photos = getPhotos();
+    pendingPhotos.forEach(p => photos.unshift(p));
+    setPhotos(photos);
+    render();
+    return;
+  }
+  const p = pendingPhotos[pendingIdx];
+  document.getElementById('ph-title').value = '';
+  document.getElementById('ph-loc').value = '';
+  document.getElementById('ph-date').value = '';
+  document.getElementById('ph-tags').value = '';
+  document.getElementById('photo-preview-container').innerHTML =
+    `<img src="${p.src}" style="max-height:160px;max-width:100%;object-fit:contain;filter:saturate(0.9)">
+     <div style="font-size:0.5rem;color:var(--text-dim);margin-top:0.4rem;letter-spacing:0.2em">Photo ${pendingIdx+1} of ${pendingPhotos.length}</div>`;
+  document.getElementById('photo-meta-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function saveMeta() {
+  const tags = document.getElementById('ph-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  pendingPhotos[pendingIdx].title = document.getElementById('ph-title').value.trim();
+  pendingPhotos[pendingIdx].loc   = document.getElementById('ph-loc').value.trim();
+  pendingPhotos[pendingIdx].date  = document.getElementById('ph-date').value;
+  pendingPhotos[pendingIdx].tags  = tags;
+  document.getElementById('photo-meta-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  pendingIdx++;
+  showNextMeta();
+}
+
+function skipMeta() {
+  document.getElementById('photo-meta-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  pendingIdx++;
+  showNextMeta();
+}
+
+function deletePhoto(idx) {
+  if (!confirm('Delete this photo?')) return;
+  const photos = getPhotos();
+  photos.splice(idx, 1);
+  setPhotos(photos);
+  render();
+}
+
+function openLightbox(idx) {
+  lbIdx = idx;
+  updateLightbox();
+  document.getElementById('photo-lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function updateLightbox() {
+  const photos = getPhotos();
+  const p = photos[lbIdx];
+  document.getElementById('lb-img').src = p.src;
+  document.getElementById('lb-caption-title').textContent = p.title || '';
+  document.getElementById('lb-caption-loc').textContent = [p.loc, p.date].filter(Boolean).join(' · ');
+}
+
+function lbNav(dir) {
+  const photos = getPhotos();
+  lbIdx = (lbIdx + dir + photos.length) % photos.length;
+  updateLightbox();
+}
+
+function closeLightbox() {
+  document.getElementById('photo-lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function filterTag(tag, btn) {
+  activeTag = tag;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function buildTagFilters(photos) {
+  const tags = new Set();
+  photos.forEach(p => (p.tags||[]).forEach(t => tags.add(t)));
+  const bar = document.getElementById('tag-filters');
+  const existing = bar.querySelectorAll('.filter-btn:not(.always)');
+  existing.forEach(b => b.remove());
+  tags.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.textContent = t;
+    btn.onclick = () => filterTag(t, btn);
+    if (t === activeTag) btn.classList.add('active');
+    bar.appendChild(btn);
+  });
+}
+
+function render() {
+  const photos = getPhotos();
+  buildTagFilters(photos);
+  const grid = document.getElementById('photo-grid');
+  const filtered = activeTag === 'all' ? photos : photos.filter(p => (p.tags||[]).includes(activeTag));
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div style="text-align:center;padding:4rem;color:var(--text-dim);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase">No photos yet</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((p, i) => {
+    const realIdx = photos.indexOf(p);
+    return `
+    <div class="photo-item">
+      <img src="${p.src}" alt="${p.title||''}" onclick="openLightbox(${realIdx})">
+      <div class="photo-caption">
+        ${p.title ? `<div class="photo-caption-title">${p.title}</div>` : ''}
+        ${p.loc ? `<div class="photo-caption-loc">📍 ${p.loc}</div>` : ''}
+        <button class="photo-caption-del" onclick="event.stopPropagation();deletePhoto(${realIdx})">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') lbNav(-1);
+  if (e.key === 'ArrowRight') lbNav(1);
+});
+
+render();
+</script>
+</body>
+</html>

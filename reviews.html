@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reviews — The Waanderer's Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lilex:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.review-tabs {
+  display: flex; gap: 0; margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.rtab {
+  padding: 0.8rem 1.8rem; font-family: var(--font);
+  font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--text-dim); cursor: pointer; border: none; background: none;
+  border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s;
+}
+
+.rtab.active { color: var(--white); border-bottom-color: var(--sand-gold); }
+.rtab:hover:not(.active) { color: var(--text-warm); }
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px; background: var(--border);
+}
+
+.review-card {
+  background: var(--sand-dark); padding: 1.8rem;
+  display: flex; flex-direction: column; gap: 0.8rem;
+  position: relative;
+}
+
+.review-type-badge {
+  font-size: 0.5rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--sand-warm);
+}
+
+.review-title { font-size: 1rem; font-weight: 400; color: var(--white); line-height: 1.3; }
+.review-author { font-size: 0.6rem; color: var(--text-dim); }
+
+.stars { display: flex; gap: 2px; }
+.star  { font-size: 0.7rem; color: var(--sand-gold); }
+.star.empty { color: rgba(232,168,74,0.15); }
+
+.review-body {
+  font-size: 0.68rem; font-weight: 300; line-height: 1.8;
+  color: var(--text-muted); flex: 1;
+}
+
+.review-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--border); padding-top: 0.8rem;
+  font-size: 0.5rem; letter-spacing: 0.2em; color: var(--text-dim);
+}
+
+.review-actions { display: flex; gap: 0.5rem; }
+
+.add-review-card {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 0.8rem; min-height: 200px;
+  border: 1px dashed rgba(232,168,74,0.12); background: transparent;
+  color: var(--text-dim); font-size: 0.6rem; letter-spacing: 0.2em;
+  text-transform: uppercase; cursor: pointer; transition: all 0.3s;
+  padding: 1.8rem;
+}
+
+.add-review-card:hover {
+  border-color: rgba(232,168,74,0.35); color: var(--sand-gold);
+  background: rgba(232,168,74,0.03);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">The Waanderer's Log</a>
+  <ul class="nav-links">
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="mtg.html">MTG</a></li>
+    <li><a href="moodboards.html">Moodboards</a></li>
+    <li><a href="photography.html">Photography</a></li>
+    <li><a href="reviews.html" class="active">Reviews</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="editor.html" class="edit-link">✦ Edit</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-left">
+    <p class="page-eyebrow">05 · Reviews</p>
+    <h1 class="page-title">Books &amp; <em>Games</em></h1>
+    <p class="page-subtitle">Everything I've finished. What resonated, what didn't, and what I'm still thinking about weeks later.</p>
+  </div>
+  <button class="btn btn-primary" onclick="openReviewModal()">+ Add Review</button>
+</div>
+
+<div class="page-content">
+  <div class="review-tabs">
+    <button class="rtab active" onclick="switchTab('books', this)">Books</button>
+    <button class="rtab" onclick="switchTab('games', this)">Games</button>
+  </div>
+  <div class="review-grid" id="review-grid"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="site-footer-sig">The Waanderer's Log · <a href="index.html">← Home</a></div>
+</footer>
+
+<!-- REVIEW MODAL -->
+<div class="modal-bg" id="review-modal">
+  <div class="modal">
+    <div class="modal-title" id="review-modal-label">Add Review</div>
+    <input type="hidden" id="r-edit-idx" value="-1">
+    <div class="form-grid">
+      <div class="form-row"><label>Type</label>
+        <select id="r-type"><option value="books">Book</option><option value="games">Game</option></select>
+      </div>
+      <div class="form-row"><label>Rating (1–5)</label>
+        <select id="r-rating">
+          <option value="5">★★★★★ — Essential</option>
+          <option value="4">★★★★☆ — Great</option>
+          <option value="3">★★★☆☆ — Good</option>
+          <option value="2">★★☆☆☆ — Decent</option>
+          <option value="1">★☆☆☆☆ — Not for me</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Title *</label><input type="text" id="r-title" placeholder="e.g. Blood Meridian"></div>
+      <div class="form-row"><label>Author / Studio</label><input type="text" id="r-author" placeholder="e.g. Cormac McCarthy"></div>
+      <div class="form-row"><label>Finished (Month/Year)</label><input type="month" id="r-date"></div>
+      <div class="form-row"><label>Genre / Tags</label><input type="text" id="r-genre" placeholder="e.g. Literary Fiction, Philosophical"></div>
+    </div>
+    <div class="form-row"><label>Review</label><textarea id="r-body" placeholder="Your honest thoughts..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('review-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveReview()">Save Review</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const KEY = 'waanderer_reviews';
+let activeTab = 'books';
+
+function getReviews() { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
+function setReviews(a) { localStorage.setItem(KEY, JSON.stringify(a)); }
+
+function starsHTML(n) {
+  return Array(5).fill(0).map((_,i) => `<span class="star${i < n ? '' : ' empty'}">★</span>`).join('');
+}
+
+function saveReview() {
+  const idx = parseInt(document.getElementById('r-edit-idx').value);
+  const r = {
+    type:   document.getElementById('r-type').value,
+    title:  document.getElementById('r-title').value.trim(),
+    author: document.getElementById('r-author').value.trim(),
+    rating: parseInt(document.getElementById('r-rating').value),
+    date:   document.getElementById('r-date').value,
+    genre:  document.getElementById('r-genre').value.trim(),
+    body:   document.getElementById('r-body').value.trim(),
+  };
+  if (!r.title) return alert('Please add a title.');
+  const reviews = getReviews();
+  if (idx >= 0) reviews[idx] = r; else reviews.push(r);
+  setReviews(reviews);
+  closeModal('review-modal');
+  render();
+}
+
+function deleteReview(idx) {
+  if (!confirm('Delete this review?')) return;
+  const reviews = getReviews(); reviews.splice(idx, 1); setReviews(reviews); render();
+}
+
+function editReview(idx) {
+  const r = getReviews()[idx];
+  document.getElementById('r-edit-idx').value = idx;
+  document.getElementById('review-modal-label').textContent = 'Edit Review';
+  document.getElementById('r-type').value = r.type;
+  document.getElementById('r-title').value = r.title;
+  document.getElementById('r-author').value = r.author || '';
+  document.getElementById('r-rating').value = r.rating;
+  document.getElementById('r-date').value = r.date || '';
+  document.getElementById('r-genre').value = r.genre || '';
+  document.getElementById('r-body').value = r.body || '';
+  openModal('review-modal');
+}
+
+function switchTab(tab, btn) {
+  activeTab = tab;
+  document.querySelectorAll('.rtab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y, m] = d.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[parseInt(m)-1]} ${y}`;
+}
+
+function render() {
+  const reviews = getReviews();
+  const filtered = reviews.filter(r => r.type === activeTab);
+  const grid = document.getElementById('review-grid');
+
+  const cards = filtered.map((r) => {
+    const idx = reviews.indexOf(r);
+    return `
+    <div class="review-card reveal">
+      <div class="review-type-badge">${r.type === 'books' ? 'Book' : 'Game'}</div>
+      <div class="review-title">${r.title}</div>
+      ${r.author ? `<div class="review-author">${r.author}</div>` : ''}
+      <div class="stars">${starsHTML(r.rating)}</div>
+      ${r.genre ? `<div style="display:flex;flex-wrap:wrap;gap:0.3rem">${r.genre.split(',').map(g=>`<span class="tag">${g.trim()}</span>`).join('')}</div>` : ''}
+      ${r.body ? `<div class="review-body">${r.body}</div>` : ''}
+      <div class="review-footer">
+        <span>${r.date ? `Finished: ${formatDate(r.date)}` : ''}</span>
+        <div class="review-actions">
+          <button class="btn" onclick="editReview(${idx})" style="font-size:0.5rem;">✎</button>
+          <button class="btn btn-danger" onclick="deleteReview(${idx})" style="font-size:0.5rem;">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  grid.innerHTML = cards + `
+    <div class="add-review-card" onclick="openReviewModal()">
+      <span style="font-size:1.6rem;font-weight:100">+</span>
+      <span>Add ${activeTab === 'books' ? 'Book' : 'Game'}</span>
+    </div>`;
+
+  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible')), 50);
+}
+
+function openReviewModal() {
+  document.getElementById('r-edit-idx').value = '-1';
+  document.getElementById('review-modal-label').textContent = 'Add Review';
+  ['r-title','r-author','r-genre','r-body'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('r-type').value = activeTab;
+  document.getElementById('r-rating').value = 4;
+  document.getElementById('r-date').value = '';
+  openModal('review-modal');
+}
+
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.modal-bg').forEach(bg => {
+  bg.addEventListener('click', e => { if (e.target === bg) closeModal(bg.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-bg.open').forEach(m => closeModal(m.id));
+});
+
+render();
+</script>
+</body>
+</html>
